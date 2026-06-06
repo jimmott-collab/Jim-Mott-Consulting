@@ -55,12 +55,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom);
+    padding: env(safe-area-inset-top) 8px env(safe-area-inset-bottom);
   }
 
   .front-door {
-    width: 100vw;
-height: 100dvh;
+    width: 100%;
+    height: 100dvh;
     display: block;
   }
 
@@ -97,7 +97,8 @@ height: 100dvh;
 </head>
 <body>
 
-  <svg class="front-door" viewBox="0 0 524 414" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="navigation" aria-label="Twins Are Birds">
+  <!-- viewBox cropped to the artwork (was 0 0 524 414) so it renders large on phones -->
+  <svg class="front-door" viewBox="30 12 436 402" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="navigation" aria-label="Twins Are Birds">
 
     <!-- flower (back layer) — swap src for a still frame if you'd rather it didn't animate -->
     <image href="IMG_8360.GIF" xlink:href="IMG_8360.GIF" x="40.5" y="65" width="415" height="415"
@@ -118,7 +119,7 @@ height: 100dvh;
     <line class="dot" x1="338" y1="284" x2="361" y2="287"></line>
 
     <!-- masthead -->
-    <text class="masthead" x="262" y="28" text-anchor="middle">JIM MOTT CONSULTING</text>
+    <text class="masthead" x="248" y="28" text-anchor="middle">JIM MOTT CONSULTING</text>
 
     <!-- nav nodes (one green letter each) -->
     <a class="node" href="about.html" aria-label="About">
@@ -126,8 +127,7 @@ height: 100dvh;
       <text class="label" x="248" y="98" text-anchor="middle">AB<tspan class="accent">O</tspan>UT</text>
     </a>
 
-    <a class="node" href="menu.html" aria-label="Thinking"> git add .
- git commit "flower amend plus new title"
+    <a class="node" href="menu.html" aria-label="Thinking">
       <rect class="hit" x="40" y="274" width="104" height="24"></rect>
       <text class="label" x="140" y="286" text-anchor="end">THINKIN<tspan class="accent">G</tspan></text>
     </a>
