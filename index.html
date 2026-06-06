@@ -4,32 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Twins Are Birds</title>
-<meta name="description" content="Anecdotes from anthropology for strategists. A flipbook series applying anthropological thinkers to commercial strategy problems.">
+<title>Twins Are Birds — Jim Mott</title>
+<meta name="description" content="Jim Mott — commercial anthropologist and cultural strategist. Twins Are Birds: anecdotes from anthropology for strategists.">
 <meta name="author" content="Jim Mott">
 <link rel="canonical" href="https://jimmott-collab.github.io/twins-are-birds/">
 
-<!-- Open Graph (LinkedIn, WhatsApp, Facebook) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jimmott-collab.github.io/twins-are-birds/">
-<meta property="og:title" content="Twins Are Birds">
-<meta property="og:description" content="Anecdotes from anthropology for strategists. A flipbook series applying anthropological thinkers to commercial strategy problems.">
+<meta property="og:title" content="Twins Are Birds — Jim Mott">
+<meta property="og:description" content="Jim Mott — commercial anthropologist and cultural strategist. Twins Are Birds: anecdotes from anthropology for strategists.">
 <meta property="og:image" content="https://jimmott-collab.github.io/twins-are-birds/og-image.jpg">
-
-<!-- Twitter/X Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Twins Are Birds">
-<meta name="twitter:description" content="Anecdotes from anthropology for strategists. A flipbook series applying anthropological thinkers to commercial strategy problems.">
+<meta name="twitter:title" content="Twins Are Birds — Jim Mott">
+<meta name="twitter:description" content="Jim Mott — commercial anthropologist and cultural strategist.">
 <meta name="twitter:image" content="https://jimmott-collab.github.io/twins-are-birds/og-image.jpg">
 
-<!-- Favicon -->
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
+<!--
+  Display font: "Amstrad PC" from The Ultimate Oldschool PC Font Pack
+  by int10h.org — Creative Commons Attribution-ShareAlike 4.0.
+  http://int10h.org/oldschool-pc-fonts/
+-->
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400;600&family=Amatic+SC:wght@400;700&display=swap');
+  :root {
+    --cream: #e8e0d4;
+    --green: #3fc85e;
+  }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @font-face {
+    font-family: 'Amstrad PC';
+    src: url('amstrad-ac.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
 
   html, body {
     height: 100%;
@@ -38,324 +51,94 @@
   }
 
   body {
-    color: #e8e0d4;
-    font-family: 'Josefin Sans', sans-serif;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  /* ── Title ── */
-  .masthead-wrap {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    padding: 40px 0 20px;
-    position: relative;
-  }
-
-  .masthead-text {
-    font-family: 'Amatic SC', sans-serif;
-    font-size: clamp(28px, 5vw, 52px);
-    font-weight: 200;
-    letter-spacing: 0.15em;
-    color: #e8e0d4;
-    text-transform: uppercase;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* RGB ghost layers — positioned, toggled by JS */
-  .masthead-ghost {
-    font-family: 'Amatic SC', sans-serif;
-    font-size: clamp(28px, 5vw, 52px);
-    font-weight: 200;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    text-align: center;
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .masthead-ghost.red { color: rgba(255,40,70,0.85); }
-  .masthead-ghost.blue { color: rgba(40,110,255,0.75); }
-
-  /* ── Flower ── */
-  .flower-wrap {
-    flex: 1;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    min-height: 0;
-    padding: 8px 0;
+    padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom);
   }
 
-  .flower-img {
-    max-height: 65vh;
-    max-width: min(676px, 90vw);
-    width: auto;
+  .front-door {
+    width: 100%;
+    max-width: min(96vw, 640px);
+    max-height: 94dvh;
     height: auto;
     display: block;
-    animation: fadeIn 2.5s ease-out 0.4s both;
   }
 
-  /* ── Enter button ── */
-  .enter-wrap {
-    flex-shrink: 0;
-    display: flex;
-    justify-content: center;
-    padding: 0 0 4vh;
-    animation: fadeIn 3.2s ease-out 1s both;
+  /* geometry */
+  .geo { stroke: var(--green); stroke-width: 1.1; fill: none; }
+  .dot {
+    stroke: var(--green);
+    stroke-width: 1.1;
+    fill: none;
+    stroke-dasharray: 1.4 2.8;
+    stroke-linecap: round;
   }
 
-  .enter-btn {
-    display: inline-block;
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 300;
-    font-size: clamp(11px, 1.2vw, 15px);
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: #e8e0d4;
-    text-decoration: none;
-    border: 1px solid rgba(232, 224, 212, 0.35);
-    padding: 12px 36px;
-    transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  /* type */
+  .front-door text {
+    font-family: 'Amstrad PC', monospace;
+    fill: var(--cream);
+    dominant-baseline: central;
   }
+  .masthead { font-size: 15px; }
+  .label    { font-size: 14px; }
+  .accent   { fill: var(--green); }
 
-  .enter-btn:hover {
-    color: #000;
-    background: #e8e0d4;
-    border-color: #e8e0d4;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  @media (max-width: 600px) {
-    .masthead-wrap { padding: 16px 0 10px; }
-    .flower-img { max-height: 50dvh; }
-    .enter-wrap { padding-bottom: 6dvh; }
-  }
-
-  /* ── glitchcore overlays ── */
-  .scanlines {
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 3px,
-      rgba(0,0,0,0.18) 3px,
-      rgba(0,0,0,0.18) 4px
-    );
-    pointer-events: none;
-    z-index: 100;
-  }
-
-  #noise {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 101;
-    opacity: 0.06;
-  }
-
-  /* VHS bar — JS moves it */
-  .vhs-bar {
-    position: fixed;
-    left: 0; right: 0;
-    height: 18px;
-    background: rgba(255,255,255,0.04);
-    z-index: 102;
-    pointer-events: none;
-    top: -40px;
-    opacity: 0;
-    transition: opacity 0.1s;
-  }
+  /* nav nodes */
+  a.node { cursor: pointer; }
+  a.node text { transition: fill 0.25s ease; }
+  a.node:hover text,
+  a.node:focus-visible text { fill: var(--green); }
+  a.node:hover .accent,
+  a.node:focus-visible .accent { fill: var(--cream); }
+  a.node:focus-visible { outline: none; }
+  .hit { fill: none; pointer-events: all; }   /* generous tap target */
 </style>
 </head>
 <body>
 
-  <!-- glitchcore overlays -->
-  <div class="scanlines"></div>
-  <canvas id="noise"></canvas>
-  <div class="vhs-bar" id="vhsBar"></div>
+  <svg class="front-door" viewBox="0 0 524 414" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="navigation" aria-label="Twins Are Birds">
 
-  <div class="masthead-wrap" id="mastheadWrap">
-    <div class="masthead-ghost red"  id="ghostRed">Twins Are Birds</div>
-    <div class="masthead-ghost blue" id="ghostBlue">Twins Are Birds</div>
-    <div class="masthead-text">Twins Are Birds</div>
-  </div>
+    <!-- flower (back layer) — swap src for a still frame if you'd rather it didn't animate -->
+    <image href="IMG_8360.GIF" xlink:href="IMG_8360.GIF" x="196" y="178" width="108" height="108"
+           preserveAspectRatio="xMidYMid meet"></image>
 
-  <div class="flower-wrap">
-    <img class="flower-img" id="flowerImg" src="IMG_8360.GIF" alt="Animated flower collage">
-  </div>
+    <!-- optional background asset (statue / streak from your mockup):
+    <image href="your-asset.png" x="205" y="108" width="90" height="120"
+           opacity="0.5" preserveAspectRatio="xMidYMid meet"></image>
+    -->
 
-  <div class="enter-wrap">
-    <a class="enter-btn" id="enterBtn" href="menu.html">Enter</a>
-  </div>
+    <!-- geometry: ring + triangle -->
+    <circle class="geo" cx="250" cy="238" r="57"></circle>
+    <polygon class="geo" points="247,132 159,284 337,284"></polygon>
 
-<script>
-(function(){
+    <!-- dotted connectors: each green letter to its vertex -->
+    <line class="dot" x1="247" y1="108" x2="247" y2="131"></line>
+    <line class="dot" x1="158" y1="284" x2="137" y2="286"></line>
+    <line class="dot" x1="338" y1="284" x2="361" y2="287"></line>
 
-  /* ── util ── */
-  const rand = (min, max) => Math.random() * (max - min) + min;
-  const randInt = (min, max) => Math.floor(rand(min, max));
+    <!-- masthead -->
+    <text class="masthead" x="247" y="27" text-anchor="middle">TWINS ARE BIRDS</text>
 
-  /* ── noise grain ── */
-  const canvas = document.getElementById('noise');
-  const ctx = canvas.getContext('2d');
-  function resize(){
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-  function drawNoise(){
-    const w = canvas.width, h = canvas.height;
-    const img = ctx.createImageData(w, h);
-    const d = img.data;
-    for(let i = 0; i < d.length; i += 4){
-      const v = Math.random() * 255;
-      d[i] = d[i+1] = d[i+2] = v;
-      d[i+3] = 255;
-    }
-    ctx.putImageData(img, 0, 0);
-    requestAnimationFrame(drawNoise);
-  }
-  drawNoise();
+    <!-- nav nodes (one green letter each) -->
+    <a class="node" href="about.html" aria-label="About">
+      <rect class="hit" x="214" y="86" width="68" height="24"></rect>
+      <text class="label" x="248" y="98" text-anchor="middle">AB<tspan class="accent">O</tspan>UT</text>
+    </a>
 
-  /* ── VHS bar ── randomly sweeps, random speed, random gap ── */
-  const vhsBar = document.getElementById('vhsBar');
-  function runVhs(){
-    const duration = rand(6000, 16000);   /* sweep duration */
-    const gap      = rand(4000, 20000);   /* wait before next */
-    const startTop = -40;
-    const endTop   = window.innerHeight + 40;
-    let start = null;
+    <a class="node" href="menu.html" aria-label="Thinking">
+      <rect class="hit" x="40" y="274" width="104" height="24"></rect>
+      <text class="label" x="140" y="286" text-anchor="end">THINKIN<tspan class="accent">G</tspan></text>
+    </a>
 
-    vhsBar.style.opacity = '1';
+    <a class="node" href="services.html" aria-label="Services">
+      <rect class="hit" x="356" y="275" width="100" height="24"></rect>
+      <text class="label" x="358" y="287" text-anchor="start"><tspan class="accent">S</tspan>ERVICES</text>
+    </a>
 
-    function sweep(ts){
-      if(!start) start = ts;
-      const progress = Math.min((ts - start) / duration, 1);
-      vhsBar.style.top = (startTop + (endTop - startTop) * progress) + 'px';
-      if(progress < 1){
-        requestAnimationFrame(sweep);
-      } else {
-        vhsBar.style.opacity = '0';
-        setTimeout(runVhs, gap);
-      }
-    }
-    requestAnimationFrame(sweep);
-  }
-  setTimeout(runVhs, rand(1000, 5000));
-
-  /* ── RGB title split ── random clip, offset, opacity each time ── */
-  const ghostRed  = document.getElementById('ghostRed');
-  const ghostBlue = document.getElementById('ghostBlue');
-
-  function glitchTitle(){
-    /* pick random clip slices */
-    const topR    = randInt(5, 50);
-    const bottomR = randInt(5, 50);
-    const topB    = randInt(5, 50);
-    const bottomB = randInt(5, 50);
-    const dxR = rand(-8, 8);
-    const dxB = rand(-8, 8);
-    const opR = rand(0.4, 0.85);
-    const opB = rand(0.3, 0.75);
-    const flickerCount = randInt(2, 5);
-    let f = 0;
-
-    function flicker(){
-      if(f >= flickerCount){
-        ghostRed.style.opacity  = '0';
-        ghostBlue.style.opacity = '0';
-        ghostRed.style.transform  = 'none';
-        ghostBlue.style.transform = 'none';
-        ghostRed.style.clipPath   = 'none';
-        ghostBlue.style.clipPath  = 'none';
-        /* schedule next glitch — random gap 3–12s */
-        setTimeout(glitchTitle, rand(3000, 12000));
-        return;
-      }
-      /* alternate between showing and hiding for flicker */
-      const on = f % 2 === 0;
-      ghostRed.style.opacity    = on ? opR : '0';
-      ghostBlue.style.opacity   = on ? opB : '0';
-      ghostRed.style.transform  = on ? `translateX(${dxR}px)` : 'none';
-      ghostBlue.style.transform = on ? `translateX(${dxB}px)` : 'none';
-      ghostRed.style.clipPath   = on ? `inset(${topR}% 0 ${bottomR}% 0)` : 'none';
-      ghostBlue.style.clipPath  = on ? `inset(${topB}% 0 ${bottomB}% 0)` : 'none';
-      f++;
-      setTimeout(flicker, rand(40, 140));
-    }
-    flicker();
-  }
-  setTimeout(glitchTitle, rand(2000, 6000));
-
-  /* ── flower slice tears ── random slices, displacement, hue each time ── */
-  const flower = document.getElementById('flowerImg');
-
-  function glitchFlower(){
-    const sliceCount = randInt(2, 5);
-    let s = 0;
-
-    function nextSlice(){
-      if(s >= sliceCount){
-        flower.style.transform  = 'none';
-        flower.style.clipPath   = 'none';
-        flower.style.filter     = 'none';
-        setTimeout(glitchFlower, rand(4000, 14000));
-        return;
-      }
-      const top    = randInt(5, 75);
-      const bottom = randInt(5, 75 - top > 5 ? 75 - top : 10);
-      const dx     = rand(-14, 14);
-      const hue    = rand(-25, 25);
-      flower.style.clipPath  = `inset(${top}% 0 ${bottom}% 0)`;
-      flower.style.transform = `translateX(${dx}px)`;
-      flower.style.filter    = `hue-rotate(${hue}deg)`;
-      s++;
-      setTimeout(nextSlice, rand(40, 100));
-    }
-    nextSlice();
-  }
-  setTimeout(glitchFlower, rand(3000, 8000));
-
-  /* ── button char corruption ── */
-  const btn = document.getElementById('enterBtn');
-  const btnLabels = ['3NT3R','EN▒ER','∃NTER','E̴N̴T̴E̴R̴','EN​TER','3NT3R','ENT​ER'];
-
-  function glitchBtn(){
-    btn.textContent = btnLabels[randInt(0, btnLabels.length)];
-    const flashDuration = rand(80, 200);
-    setTimeout(function(){
-      btn.textContent = 'Enter';
-      /* next corruption — random gap 1.5–8s */
-      setTimeout(glitchBtn, rand(1500, 8000));
-    }, flashDuration);
-  }
-  setTimeout(glitchBtn, rand(2000, 6000));
-
-})();
-</script>
+  </svg>
 
 </body>
 </html>
