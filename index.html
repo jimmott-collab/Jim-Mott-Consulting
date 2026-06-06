@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>document.documentElement.className = 'js';</script>
 
 <title>Twins Are Birds — Jim Mott</title>
 <meta name="description" content="Jim Mott — commercial anthropologist and cultural strategist. Twins Are Birds: anecdotes from anthropology for strategists.">
@@ -103,6 +104,30 @@
       transform-origin: 248px 150px;
     }
   }
+
+  /* ── boot sequence ──
+     With JS on, the title is hidden until it types and the triangle group
+     is hidden until it blinks in. No-JS / reduced-motion show the finished page. */
+  html.js .masthead            { visibility: hidden; }
+  html.js #assembly            { opacity: 0; }
+  html.js #assembly:not(.reveal) { pointer-events: none; }
+
+  @keyframes blinkIn {
+    0%   { opacity: 0; }
+    12%  { opacity: 1; }
+    24%  { opacity: 0; }
+    40%  { opacity: 1; }
+    56%  { opacity: 0; }
+    72%  { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  #assembly.reveal { animation: blinkIn 0.5s steps(1, end) forwards; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js .masthead { visibility: visible; }
+    html.js #assembly { opacity: 1; }
+    #assembly.reveal  { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -111,7 +136,7 @@
   <svg class="front-door" viewBox="30 6 436 408" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="navigation" aria-label="Twins Are Birds">
   <g class="scaler">
 
-    <!-- flower (back layer) — swap src for a still frame if you'd rather it didn't animate -->
+    <!-- flower (back layer) — shown first, alone -->
     <image href="IMG_8360.GIF" xlink:href="IMG_8360.GIF" x="40.5" y="65" width="415" height="415"
            preserveAspectRatio="xMidYMid meet"></image>
 
@@ -120,36 +145,95 @@
            opacity="0.5" preserveAspectRatio="xMidYMid meet"></image>
     -->
 
-    <!-- geometry: ring + triangle -->
-    <circle class="geo" cx="247" cy="233" r="52"></circle>
-    <polygon class="geo" points="247,132 159,284 337,284"></polygon>
-
-    <!-- dotted connectors: each green letter to its vertex -->
-    <line class="dot" x1="247" y1="108" x2="247" y2="131"></line>
-    <line class="dot" x1="158" y1="284" x2="137" y2="286"></line>
-    <line class="dot" x1="338" y1="284" x2="361" y2="287"></line>
-
-    <!-- masthead -->
+    <!-- masthead — types out with a blinking block cursor -->
     <text class="masthead" x="248" y="20" text-anchor="middle">JIM MOTT CONSULTING</text>
 
-    <!-- nav nodes (one green letter each) -->
-    <a class="node" href="about.html" aria-label="About">
-      <rect class="hit" x="214" y="86" width="68" height="24"></rect>
-      <text class="label" x="248" y="98" text-anchor="middle">AB<tspan class="accent">O</tspan>UT</text>
-    </a>
+    <!-- everything below blinks into view together -->
+    <g id="assembly">
 
-    <a class="node" href="menu.html" aria-label="Thinking">
-      <rect class="hit" x="40" y="274" width="104" height="24"></rect>
-      <text class="label" x="140" y="286" text-anchor="end">THINKIN<tspan class="accent">G</tspan></text>
-    </a>
+      <!-- geometry: ring + triangle -->
+      <circle class="geo" cx="247" cy="233" r="52"></circle>
+      <polygon class="geo" points="247,132 159,284 337,284"></polygon>
 
-    <a class="node" href="services.html" aria-label="Services">
-      <rect class="hit" x="356" y="275" width="100" height="24"></rect>
-      <text class="label" x="358" y="287" text-anchor="start"><tspan class="accent">S</tspan>ERVICES</text>
-    </a>
+      <!-- dotted connectors: each green letter to its vertex -->
+      <line class="dot" x1="247" y1="108" x2="247" y2="131"></line>
+      <line class="dot" x1="158" y1="284" x2="137" y2="286"></line>
+      <line class="dot" x1="338" y1="284" x2="361" y2="287"></line>
 
+      <!-- nav nodes (one green letter each) -->
+      <a class="node" href="about.html" aria-label="About">
+        <rect class="hit" x="214" y="86" width="68" height="24"></rect>
+        <text class="label" x="248" y="98" text-anchor="middle">AB<tspan class="accent">O</tspan>UT</text>
+      </a>
+
+      <a class="node" href="menu.html" aria-label="Thinking">
+        <rect class="hit" x="40" y="274" width="104" height="24"></rect>
+        <text class="label" x="140" y="286" text-anchor="end">THINKIN<tspan class="accent">G</tspan></text>
+      </a>
+
+      <a class="node" href="services.html" aria-label="Services">
+        <rect class="hit" x="356" y="275" width="100" height="24"></rect>
+        <text class="label" x="358" y="287" text-anchor="start"><tspan class="accent">S</tspan>ERVICES</text>
+      </a>
+
+    </g>
   </g>
   </svg>
+
+  <script>
+  (function () {
+    var mast = document.querySelector('.masthead');
+    var assembly = document.getElementById('assembly');
+    var FULL = 'JIM MOTT CONSULTING';
+    var CURSOR = '\u2588';   // CP437 solid block — the Amstrad cursor
+
+    var reduce = window.matchMedia &&
+                 window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function run() {
+      if (reduce) {
+        mast.style.visibility = 'visible';
+        assembly.style.opacity = '1';
+        return;
+      }
+
+      // Measure the finished title so it lands centred, then type from the left edge
+      var len = mast.getComputedTextLength();
+      mast.setAttribute('text-anchor', 'start');
+      mast.setAttribute('x', (248 - len / 2).toFixed(1));
+      mast.textContent = '';
+      mast.style.visibility = 'visible';
+
+      var i = 0, cursorOn = true;
+      function render() {
+        mast.textContent = FULL.slice(0, i) + (cursorOn ? CURSOR : '');
+      }
+      var blink = setInterval(function () { cursorOn = !cursorOn; render(); }, 260);
+
+      function typeNext() {
+        if (i < FULL.length) {
+          i++; cursorOn = true; render();
+          setTimeout(typeNext, 105);
+        } else {
+          setTimeout(function () {        // let the cursor blink a few times
+            clearInterval(blink);
+            mast.textContent = FULL;       // settle, no cursor
+            assembly.classList.add('reveal');
+          }, 780);
+        }
+      }
+
+      setTimeout(typeNext, 700);           // flower alone, briefly
+    }
+
+    // Wait for the Amstrad font so measuring and the typed glyphs are correct
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(run);
+    } else {
+      run();
+    }
+  })();
+  </script>
 
 </body>
 </html>
