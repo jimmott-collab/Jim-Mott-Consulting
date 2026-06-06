@@ -93,12 +93,23 @@
   a.node:focus-visible .accent { fill: var(--cream); }
   a.node:focus-visible { outline: none; }
   .hit { fill: none; pointer-events: all; }   /* generous tap target */
+
+  /* desktop only: shrink the whole assemblage ~10% so the flower clears the bottom.
+     mobile (< 768px) is untouched. */
+  @media (min-width: 768px) {
+    .scaler {
+      transform: scale(0.9);
+      transform-box: view-box;
+      transform-origin: 248px 150px;
+    }
+  }
 </style>
 </head>
 <body>
 
   <!-- viewBox cropped to the artwork (was 0 0 524 414) so it renders large on phones -->
-  <svg class="front-door" viewBox="30 12 436 402" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="navigation" aria-label="Twins Are Birds">
+  <svg class="front-door" viewBox="30 6 436 408" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="navigation" aria-label="Twins Are Birds">
+  <g class="scaler">
 
     <!-- flower (back layer) — swap src for a still frame if you'd rather it didn't animate -->
     <image href="IMG_8360.GIF" xlink:href="IMG_8360.GIF" x="40.5" y="65" width="415" height="415"
@@ -119,7 +130,7 @@
     <line class="dot" x1="338" y1="284" x2="361" y2="287"></line>
 
     <!-- masthead -->
-    <text class="masthead" x="248" y="28" text-anchor="middle">JIM MOTT CONSULTING</text>
+    <text class="masthead" x="248" y="20" text-anchor="middle">JIM MOTT CONSULTING</text>
 
     <!-- nav nodes (one green letter each) -->
     <a class="node" href="about.html" aria-label="About">
@@ -137,6 +148,7 @@
       <text class="label" x="358" y="287" text-anchor="start"><tspan class="accent">S</tspan>ERVICES</text>
     </a>
 
+  </g>
   </svg>
 
 </body>
