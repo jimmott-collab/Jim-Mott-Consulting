@@ -111,6 +111,13 @@
     }
   }
 
+  /* mobile: enlarge the lockup so it reads at the same scale as the interior pages */
+  @media (max-width: 767px) {
+    body { padding-left: 0; padding-right: 0; }
+    .masthead { font-size: 19px; }
+    .subhead  { font-size: 10px; }
+  }
+
   /* ── boot sequence ──
      With JS on, the title is hidden until it types and the triangle group
      is hidden until it blinks in. No-JS / reduced-motion show the finished page. */
@@ -141,7 +148,7 @@
 <body>
 
   <!-- viewBox cropped to the artwork (was 0 0 524 414) so it renders large on phones -->
-  <svg class="front-door" viewBox="30 6 436 408" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="navigation" aria-label="Jim Mott Consulting">
+  <svg class="front-door" viewBox="37 6 422 408" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="navigation" aria-label="Jim Mott Consulting">
   <g class="scaler">
 
     <!-- flower (back layer) — shown first, alone -->
@@ -155,7 +162,7 @@
 
     <!-- masthead — types out with a blinking block cursor -->
     <text class="masthead" x="248" y="20" text-anchor="middle">JIM MOTT CONSULTING</text>
-    <text class="subhead" x="248" y="34" text-anchor="middle">STRATEGIC AND CULTURAL INSIGHT</text>
+    <text class="subhead" x="248" y="36" text-anchor="middle">STRATEGIC AND CULTURAL INSIGHT</text>
 
     <!-- everything below blinks into view together -->
     <g id="assembly">
