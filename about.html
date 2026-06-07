@@ -1,256 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — Twins Are Birds</title>
-<meta name="description" content="Twins Are Birds is a flipbook series by Jim Mott applying anthropological thinkers to commercial strategy problems.">
-<meta name="author" content="Jim Mott">
-<link rel="canonical" href="https://jimmott-collab.github.io/twins-are-birds/about.html">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://jimmott-collab.github.io/twins-are-birds/about.html">
-<meta property="og:title" content="About — Twins Are Birds">
-<meta property="og:description" content="Twins Are Birds is a flipbook series by Jim Mott applying anthropological thinkers to commercial strategy problems.">
-<meta property="og:image" content="https://jimmott-collab.github.io/twins-are-birds/og-image.jpg">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="About — Twins Are Birds">
-<meta name="twitter:description" content="Twins Are Birds is a flipbook series by Jim Mott applying anthropological thinkers to commercial strategy problems.">
-<meta name="twitter:image" content="https://jimmott-collab.github.io/twins-are-birds/og-image.jpg">
-
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script>document.documentElement.className = 'js';</script>
+<title>About — Jim Mott</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400;600&family=Amatic+SC:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&display=swap');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root{
+  --cream:#e8e0d4;
+  --green:#3fc85e;
+}
 
-  html, body {
-    height: 100%;
-    background: #000;
-  }
+/* Display font: "Amstrad PC" from The Ultimate Oldschool PC Font Pack
+   by int10h.org — CC BY-SA 4.0. http://int10h.org/oldschool-pc-fonts/ */
+@font-face{
+  font-family:'Amstrad PC';
+  src:url('amstrad-ac.woff2') format('woff2');
+  font-weight:normal;
+  font-style:normal;
+  font-display:swap;
+}
 
-  body {
-    color: #e8e0d4;
-    font-family: 'Josefin Sans', sans-serif;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-  /* ── Hamburger ── */
-  .hamburger-btn {
-    position: fixed;
-    top: 18px;
-    right: 20px;
-    z-index: 1000;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .hamburger-btn span {
-    display: block;
-    width: 22px;
-    height: 1px;
-    background: rgba(232,224,212,0.45);
-    transition: all 0.3s ease;
-    transform-origin: center;
-  }
-  .hamburger-btn:hover span { background: rgba(232,224,212,0.75); }
-  .hamburger-btn.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-  .hamburger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .hamburger-btn.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+html,body{
+  width:100%;height:100%;
+  background:#000;
+  overflow:hidden;
+}
 
-  .nav-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10,10,10,0.0);
-    z-index: 998;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-  .nav-overlay.open { opacity: 1; pointer-events: all; }
+body{
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:env(safe-area-inset-top) 8px env(safe-area-inset-bottom);
+}
 
-  .nav-drawer {
-    position: fixed;
-    top: 0; right: 0;
-    width: 220px; height: 100%;
-    background: #0a0a0a;
-    border-left: 1px solid rgba(255,255,255,0.07);
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px 36px;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-  .nav-drawer.open { transform: translateX(0); }
-  .nav-drawer a {
-    display: block;
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 300;
-    font-size: 13px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-    text-decoration: none;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    transition: color 0.2s ease;
-  }
-  .nav-drawer a:first-child { border-top: 1px solid rgba(255,255,255,0.06); }
-  .nav-drawer a:hover { color: rgba(255,255,255,0.8); }
-  .nav-drawer .nav-label {
-    font-size: 9px;
-    letter-spacing: 0.25em;
-    color: rgba(255,255,255,0.15);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
+/* header (Amstrad) */
+.page-head{
+  padding-top:clamp(16px,4vh,40px);
+  text-align:center;
+}
+.page-title{
+  font-family:'Amstrad PC',monospace;
+  color:var(--cream);
+  font-size:clamp(16px,4.5vw,22px);
+  font-weight:normal;
+  letter-spacing:0.18em;
+  display:inline-block;
+  white-space:nowrap;
+}
+html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 
-  /* ── Masthead ── */
-  .masthead-wrap {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    padding: 40px 0 20px;
-  }
+/* middle: copy + links */
+.middle{
+  flex:1;
+  width:100%;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(14px,3vh,26px);
+}
 
-  .masthead-text {
-    font-family: 'Amatic SC', sans-serif;
-    font-size: clamp(28px, 5vw, 52px);
-    font-weight: 200;
-    letter-spacing: 0.15em;
-    color: #e8e0d4;
-    text-transform: uppercase;
-    text-align: center;
-  }
+#copy-wrap{
+  flex:1;
+  min-height:0;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-  /* ── Content ── */
-  .content {
-    width: 100%;
-    max-width: 620px;
-    padding: 40px 32px 80px;
-    animation: fadeIn 2.5s ease-out 0.4s both;
-  }
+/* body copy (Josefin Sans) */
+.body-text{
+  max-width:30rem;
+  text-align:center;
+  padding:0 24px;
+}
+.body-text p{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:300;
+  font-size:clamp(15px,2.2vw,19px);
+  letter-spacing:0.04em;
+  line-height:1.8;
+  color:var(--cream);
+}
 
-  .divider {
-    width: 40px;
-    height: 1px;
-    background: rgba(232, 224, 212, 0.3);
-    margin: 0 auto 48px;
-  }
+/* links beneath the copy (Amstrad) */
+.page-links{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+.page-links a{
+  font-family:'Amstrad PC',monospace;
+  color:var(--cream);
+  font-size:clamp(13px,3.4vw,15px);
+  letter-spacing:0.14em;
+  text-decoration:none;
+  transition:color 0.25s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.page-links a:hover,
+.page-links a:focus-visible{color:var(--green);}
+.page-links a:focus-visible{outline:none;}
 
-  .body-text p {
-    font-weight: 300;
-    font-size: clamp(13px, 1.4vw, 15px);
-    letter-spacing: 0.06em;
-    line-height: 1.9;
-    color: #e8e0d4;
-    margin-bottom: 2em;
-  }
+@media (prefers-reduced-motion: reduce){
+  html.js .page-title{ visibility:visible; }
+}
 
-  .body-text p:last-child { margin-bottom: 0; }
-
-  .section-rule {
-    width: 30px;
-    height: 1px;
-    background: rgba(232, 224, 212, 0.25);
-    margin: 40px auto;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  @media (max-width: 600px) {
-    .masthead-wrap { padding: 16px 0 10px; }
-    .content { padding: 32px 20px 48px; }
-  }
+/* breadcrumb — DOS-path wayfinding back up the tree */
+.crumb{
+  position:fixed;
+  top:calc(env(safe-area-inset-top) + 16px);
+  left:calc(env(safe-area-inset-left) + 30px);
+  padding:0;
+  font-family:'Amstrad PC',monospace;
+  font-size:11px; letter-spacing:0.16em;
+  color:rgba(232,224,212,0.40);
+  z-index:200; -webkit-tap-highlight-color:transparent;
+}
+.crumb a{ color:rgba(232,224,212,0.40); text-decoration:none; transition:color .25s ease; }
+.crumb a:hover,.crumb a:focus-visible{ color:var(--green); outline:none; }
+.crumb .sep{ opacity:.5; }
+.crumb .here{ color:var(--cream); }
 </style>
 </head>
 <body>
+<nav class="crumb"><a href="index.html">JIM MOTT</a> <span class="sep">\</span> <span class="here">ABOUT</span></nav>
 
-<!-- HAMBURGER MENU -->
-<button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-<div class="nav-overlay" id="navOverlay"></div>
-<nav class="nav-drawer" id="navDrawer">
-  <p class="nav-label">Twins Are Birds</p>
-  <a href="index.html">Home</a>
-  <a href="menu.html">Menu</a>
-  <a href="about.html">About</a>
-  <a href="contact.html">Contact</a>
-</nav>
-
-<div class="masthead-wrap">
-  <div class="masthead-text">About Twins Are Birds</div>
-</div>
-
-<div class="content">
-  <div class="divider"></div>
-  <div class="body-text">
-    <p>Twins Are Birds is a primer in anthropological thinking as it applies to strategic problems. It is vignettes and cuts from key thinkers and more obscure writers who have useful things to say about what makes humans human.</p>
-
-    <div class="section-rule"></div>
-
-    <p>Anthropology is full of wild ideas hidden behind stories about people making slightly different shaped pots or using the local intranet to sell fish. It deals with everything from why menthol cigarettes are racist to why time is a product of place and scientific progress is a myth.</p>
-
-    <div class="section-rule"></div>
-
-    <p>If what you do involves figuring out what other people are doing — then anthropology should be on your radar and in your reading list.</p>
-
-    <p>Twins Are Birds is a starting point and a way in and an invitation to check out some really fucking cool ways of thinking.</p>
+<header class="page-head"><h1 class="page-title" id="page-title">ABOUT</h1></header>
+<main class="middle">
+  <div id="copy-wrap">
+    <div class="body-text">
+      <p>My name is Jim Mott. I help my clients make sense of what people think and do, so they can build better things for them.</p>
+    </div>
   </div>
-</div>
+  <nav class="page-links">
+    <a href="Jim_Mott_CV_2026.pdf" download="Jim Mott CV 2026.pdf">CV</a>
+    <a href="https://www.linkedin.com/in/jim-mott-anthro/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="#" id="mailto-link">Contact</a>
+  </nav>
+</main>
 
 <script>
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const navDrawer = document.getElementById('navDrawer');
-const navOverlay = document.getElementById('navOverlay');
+// title types out with the Amstrad block cursor
+(function(){
+  var title  = document.getElementById('page-title');
+  var FULL   = 'ABOUT';
+  var CURSOR = '\u2588';   // CP437 solid block — the Amstrad cursor
+  var reduce = window.matchMedia &&
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function openMenu() {
-  hamburgerBtn.classList.add('open');
-  navDrawer.classList.add('open');
-  navOverlay.classList.add('open');
-}
+  function run(){
+    if(reduce){ title.textContent = FULL; title.style.visibility = 'visible'; return; }
+    title.textContent = FULL;                 // measure finished width
+    title.style.width = title.offsetWidth + 'px';
+    title.style.textAlign = 'left';
+    title.textContent = '';
+    title.style.visibility = 'visible';
 
-function closeMenu() {
-  hamburgerBtn.classList.remove('open');
-  navDrawer.classList.remove('open');
-  navOverlay.classList.remove('open');
-}
+    var i = 0, on = true;
+    function render(){ title.textContent = FULL.slice(0, i) + (on ? CURSOR : ''); }
+    var blink = setInterval(function(){ on = !on; render(); }, 260);
 
-hamburgerBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  navDrawer.classList.contains('open') ? closeMenu() : openMenu();
-});
+    function type(){
+      if(i < FULL.length){ i++; on = true; render(); setTimeout(type, 120); }
+      else { setTimeout(function(){ clearInterval(blink); title.textContent = FULL; }, 900); }
+    }
+    setTimeout(type, 350);
+  }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(run); } else { run(); }
+})();
 
-navOverlay.addEventListener('click', closeMenu);
-
-navDrawer.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', closeMenu);
-});
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeMenu();
-});
+// email assembled at runtime so the address isn't sitting in the markup for scrapers
+(function(){
+  var u = ['j','i','m','.','m','o','t','t','.','i','s','.','h','e','r','e','@','g','m','a','i','l','.','c','o','m'];
+  var a = document.getElementById('mailto-link');
+  if(a) a.href = 'mailto:' + u.join('');
+})();
 </script>
 
 </body>

@@ -84,6 +84,12 @@
   .masthead { font-size: 15px; }
   .label    { font-size: 14px; }
   .accent   { fill: var(--green); }
+  .subhead {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    fill: rgba(232,224,212,0.55);
+    transition: opacity 1s ease;
+  }
 
   /* nav nodes */
   a.node { cursor: pointer; }
@@ -110,6 +116,7 @@
      is hidden until it blinks in. No-JS / reduced-motion show the finished page. */
   html.js .masthead            { visibility: hidden; }
   html.js #assembly            { opacity: 0; }
+  html.js .subhead             { opacity: 0; }
   html.js #assembly:not(.reveal) { pointer-events: none; }
 
   @keyframes blinkIn {
@@ -126,6 +133,7 @@
   @media (prefers-reduced-motion: reduce) {
     html.js .masthead { visibility: visible; }
     html.js #assembly { opacity: 1; }
+    html.js .subhead  { opacity: 1; }
     #assembly.reveal  { animation: none; }
   }
 </style>
@@ -147,6 +155,7 @@
 
     <!-- masthead — types out with a blinking block cursor -->
     <text class="masthead" x="248" y="20" text-anchor="middle">JIM MOTT CONSULTING</text>
+    <text class="subhead" x="248" y="34" text-anchor="middle">STRATEGIC AND CULTURAL INSIGHT</text>
 
     <!-- everything below blinks into view together -->
     <g id="assembly">
@@ -183,6 +192,7 @@
   <script>
   (function () {
     var mast = document.querySelector('.masthead');
+    var subhead = document.querySelector('.subhead');
     var assembly = document.getElementById('assembly');
     var FULL = 'JIM MOTT CONSULTING';
     var CURSOR = '\u2588';   // CP437 solid block — the Amstrad cursor
@@ -193,6 +203,7 @@
     function run() {
       if (reduce) {
         mast.style.visibility = 'visible';
+        if (subhead) subhead.style.opacity = '1';
         assembly.style.opacity = '1';
         return;
       }
@@ -218,6 +229,7 @@
           setTimeout(function () {        // let the cursor blink a few times
             clearInterval(blink);
             mast.textContent = FULL;       // settle, no cursor
+            if (subhead) subhead.style.opacity = '1';   // fade in the tagline
             assembly.classList.add('reveal');
           }, 780);
         }
