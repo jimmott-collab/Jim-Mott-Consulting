@@ -74,8 +74,8 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   justify-content:center;
 }
 #art{
-  max-height:100%;
-  max-width:100%;
+  max-height:90%;
+  max-width:90%;
   height:auto;
   width:auto;
   display:block;
@@ -87,6 +87,7 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   flex-direction:column;
   align-items:center;
   gap:10px;
+  margin-bottom:18px;
 }
 .page-links a{
   font-family:'Amstrad PC',monospace;
@@ -107,8 +108,10 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 
   /* breadcrumb — DOS-path wayfinding back up the tree */
   .crumb{
-    position:fixed; top:0; left:0;
-    padding:calc(env(safe-area-inset-top) + 16px) 18px 12px calc(env(safe-area-inset-left) + 22px);
+    position:fixed;
+    top:calc(env(safe-area-inset-top) + 16px);
+    left:calc(env(safe-area-inset-left) + 30px);
+    padding:0;
     font-family:'Amstrad PC',monospace;
     font-size:11px; letter-spacing:0.16em;
     color:rgba(232,224,212,0.40);
@@ -126,7 +129,7 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 <header class="page-head"><h1 class="page-title" id="page-title">SERVICES</h1></header>
 <main class="middle">
   <div id="art-wrap">
-    <video id="art" autoplay loop muted playsinline poster="butterfly-labyrinth-poster.jpg">
+    <video id="art" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="butterfly-labyrinth-poster.jpg">
       <source src="butterfly-labyrinth.webm" type="video/webm">
       <source src="butterfly-labyrinth.mp4" type="video/mp4">
     </video>
@@ -182,6 +185,20 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   } else {
     run();
   }
+})();
+</script>
+<script>
+(function(){
+  var v=document.getElementById('art');
+  if(!v) return;
+  v.muted=true;                              // iOS requires muted set as property
+  function tryPlay(){ var p=v.play(); if(p&&p.catch){ p.catch(function(){}); } }
+  tryPlay();
+  // some mobiles block autoplay until first interaction or when tab becomes visible
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) tryPlay(); });
+  var once=function(){ tryPlay(); document.removeEventListener('touchstart',once); document.removeEventListener('click',once); };
+  document.addEventListener('touchstart',once,{passive:true});
+  document.addEventListener('click',once);
 })();
 </script>
 </body>

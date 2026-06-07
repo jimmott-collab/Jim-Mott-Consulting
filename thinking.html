@@ -103,8 +103,10 @@ canvas{display:block;}
 
   /* breadcrumb — DOS-path wayfinding back up the tree */
   .crumb{
-    position:fixed; top:0; left:0;
-    padding:calc(env(safe-area-inset-top) + 16px) 18px 12px calc(env(safe-area-inset-left) + 22px);
+    position:fixed;
+    top:calc(env(safe-area-inset-top) + 16px);
+    left:calc(env(safe-area-inset-left) + 30px);
+    padding:0;
     font-family:'Amstrad PC',monospace;
     font-size:11px; letter-spacing:0.16em;
     color:rgba(232,224,212,0.40);
