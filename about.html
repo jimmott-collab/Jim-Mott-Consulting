@@ -67,13 +67,27 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   gap:clamp(14px,3vh,26px);
 }
 
-#copy-wrap{
+#stack{
   flex:1;
   min-height:0;
   width:100%;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
+  gap:clamp(16px,3.2vh,30px);
+}
+#head-wrap{
+  width:100%;
+  max-width:min(200px,46vw);
+  display:flex;
+  justify-content:center;
+}
+#head-wrap video{
+  width:100%;
+  height:auto;
+  display:block;
+  mix-blend-mode:lighten;   /* drops the video's black background into the page */
 }
 
 /* body copy (Josefin Sans) */
@@ -134,11 +148,16 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 </style>
 </head>
 <body>
-<nav class="crumb"><a href="index.html">JIM MOTT</a> <span class="sep">\</span> <span class="here">ABOUT</span></nav>
+<nav class="crumb"><a href="index.html">HOME</a></nav>
 
 <header class="page-head"><h1 class="page-title" id="page-title">ABOUT</h1></header>
 <main class="middle">
-  <div id="copy-wrap">
+  <div id="stack">
+    <div id="head-wrap">
+      <video id="head" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="poster_square.jpg">
+        <source src="head_square.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="body-text">
       <p>My name is Jim Mott. I help my clients make sense of what people think and do, so they can build better things for them.</p>
     </div>
@@ -185,6 +204,20 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   var u = ['j','i','m','.','m','o','t','t','.','i','s','.','h','e','r','e','@','g','m','a','i','l','.','c','o','m'];
   var a = document.getElementById('mailto-link');
   if(a) a.href = 'mailto:' + u.join('');
+})();
+</script>
+
+<script>
+(function(){
+  var v=document.getElementById('head');
+  if(!v) return;
+  v.muted=true;
+  function go(){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
+  go();
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) go(); });
+  var once=function(){ go(); document.removeEventListener('touchstart',once); document.removeEventListener('click',once); };
+  document.addEventListener('touchstart',once,{passive:true});
+  document.addEventListener('click',once);
 })();
 </script>
 
