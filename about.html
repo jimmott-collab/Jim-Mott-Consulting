@@ -37,9 +37,9 @@ body{
   flex-direction:column;
   align-items:center;
   padding:
-    calc(env(safe-area-inset-top) + clamp(14px,3.5vh,30px))
+    calc(env(safe-area-inset-top) + clamp(10px,2.5vh,22px))
     8px
-    calc(env(safe-area-inset-bottom) + clamp(14px,3.5vh,30px));
+    calc(env(safe-area-inset-bottom) + clamp(10px,2.5vh,22px));
 }
 .stack{
   flex:1;
@@ -49,7 +49,7 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:clamp(16px,3vh,28px);
+  gap:clamp(10px,2vh,18px);
 }
 
 /* header */
@@ -74,7 +74,7 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 .body-text p{
   font-family:'Josefin Sans',sans-serif;
   font-weight:300;
-  font-size:clamp(15px,2.2vw,19px);
+  font-size:clamp(12px,1.8vw,13px);
   letter-spacing:0.04em;
   line-height:1.8;
   color:var(--cream);
@@ -128,7 +128,7 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 
 /* mobile: keep the art usefully large; the page may scroll if cramped */
 @media (max-width:767px){
-  .art-wrap{ min-height:40vh; }
+  .art-wrap{ min-height:56vh; }
 }
 
 /* desktop: lock to one screen - no scroll, wider reading column */
@@ -162,8 +162,7 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   <header class="page-head"><h1 class="page-title" id="page-title">ABOUT</h1></header>
 
   <main class="body-text">
-    <p>My name is Jim Mott.</p>
-    <p>I have over 15 years of experience working in research.</p>
+    <p>My name is Jim Mott. I am an Anthropologist with 15 years of experience working in market research.</p>
     <p>I help my clients make sense of what people think and do, so they can build better things for them.</p>
   </main>
 

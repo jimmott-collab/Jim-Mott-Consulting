@@ -37,9 +37,9 @@ body{
   flex-direction:column;
   align-items:center;
   padding:
-    calc(env(safe-area-inset-top) + clamp(14px,3.5vh,30px))
+    calc(env(safe-area-inset-top) + clamp(10px,2.5vh,22px))
     8px
-    calc(env(safe-area-inset-bottom) + clamp(14px,3.5vh,30px));
+    calc(env(safe-area-inset-bottom) + clamp(10px,2.5vh,22px));
 }
 .stack{
   flex:1;
@@ -49,7 +49,7 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:clamp(16px,3vh,26px);
+  gap:clamp(10px,2vh,18px);
 }
 
 /* header */
@@ -110,57 +110,15 @@ canvas{display:block;}
 .body-text p{
   font-family:'Josefin Sans',sans-serif;
   font-weight:300;
-  font-size:clamp(15px,2.2vw,19px);
+  font-size:clamp(12px,1.8vw,13px);
   letter-spacing:0.04em;
   line-height:1.8;
   color:var(--cream);
 }
 
-/* ── the two writing projects, laid out like the Methods blocks: the link
-   as the Amstrad heading, the description in Josefin underneath. ── */
-.works{
-  width:100%;
-  max-width:32rem;
-  padding:0 24px;
-  text-align:center;
-}
-.work{ margin-bottom:clamp(14px,2.5vh,22px); }
-.work:last-child{ margin-bottom:0; }
-.work-link{
-  display:inline-block;
-  font-family:'Amstrad PC',monospace;
-  color:var(--green);
-  font-size:clamp(13px,3.4vw,15px);
-  letter-spacing:0.14em;
-  line-height:1.5;
-  text-decoration:none;
-  margin-bottom:12px;
-  transition:color 0.25s ease;
-  -webkit-tap-highlight-color:transparent;
-}
-.work-link:hover,
-.work-link:focus-visible{ color:var(--cream); outline:none; }
-.work-desc{
-  font-family:'Josefin Sans',sans-serif;
-  font-weight:300;
-  font-size:clamp(15px,2.2vw,19px);
-  letter-spacing:0.04em;
-  line-height:1.7;
-  color:var(--cream);
-}
-.works-note{
-  font-family:'Josefin Sans',sans-serif;
-  font-weight:300;
-  font-size:clamp(14px,2vw,17px);
-  letter-spacing:0.04em;
-  color:var(--cream);
-  opacity:0.65;
-  margin-top:clamp(12px,2.5vh,20px);
-}
-
 /* mobile: keep the mask usefully large; the page may scroll if cramped */
 @media (max-width:767px){
-  .art-wrap{ min-height:36vh; }
+  .art-wrap{ min-height:52vh; }
 }
 
 /* desktop: lock to one screen - no scroll, wider reading column */
@@ -202,17 +160,10 @@ canvas{display:block;}
     <div id="cv-wrap"><canvas id="gc"></canvas><canvas id="fc" style="position:absolute;top:0;left:0;pointer-events:none;mix-blend-mode:color-burn;z-index:10;"></canvas></div>
   </div>
 
-  <section class="works">
-    <div class="work">
-      <a class="work-link" href="menu.html">TWINS ARE BIRDS</a>
-      <div class="work-desc">A primer on Anthropology for Strategy, with each issue built around a single thinker and a single commercial case study.</div>
-    </div>
-    <div class="work">
-      <a class="work-link" href="https://luckybaboon.substack.com/" target="_blank" rel="noopener noreferrer">SHIFTING DULLNESS</a>
-      <div class="work-desc">A mix of bigger think pieces (mainly around AI at the moment) and more personal reflections on Ethnography and Anthropology.</div>
-    </div>
-    <p class="works-note">All of it remains a work in progress.</p>
-  </section>
+  <nav class="page-links">
+    <a href="menu.html">Twins Are Birds</a>
+    <a href="https://luckybaboon.substack.com/" target="_blank" rel="noopener noreferrer">Shifting Dullness</a>
+  </nav>
 </div>
 <script>
 (function(){

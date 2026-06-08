@@ -37,9 +37,9 @@ body{
   flex-direction:column;
   align-items:center;
   padding:
-    calc(env(safe-area-inset-top) + clamp(14px,3.5vh,30px))
+    calc(env(safe-area-inset-top) + clamp(10px,2.5vh,22px))
     8px
-    calc(env(safe-area-inset-bottom) + clamp(14px,3.5vh,30px));
+    calc(env(safe-area-inset-bottom) + clamp(10px,2.5vh,22px));
 }
 .stack{
   flex:1;
@@ -49,7 +49,7 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:clamp(16px,3vh,28px);
+  gap:clamp(10px,2vh,18px);
 }
 
 /* header */
@@ -74,7 +74,7 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 .body-text p{
   font-family:'Josefin Sans',sans-serif;
   font-weight:300;
-  font-size:clamp(15px,2.2vw,19px);
+  font-size:clamp(12px,1.8vw,13px);
   letter-spacing:0.04em;
   line-height:1.8;
   color:var(--cream);
@@ -124,7 +124,7 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 
 /* mobile: keep the art usefully large; the page may scroll if cramped */
 @media (max-width:767px){
-  .art-wrap{ min-height:34vh; }
+  .art-wrap{ min-height:42vh; }
 }
 
 /* desktop: lock to one screen - no scroll, wider reading column */
@@ -158,8 +158,8 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   <header class="page-head"><h1 class="page-title" id="page-title">SERVICES</h1></header>
 
   <main class="body-text">
-    <p>For all the tools and speed available to us &mdash; things are getting more abstract and less clear. The more detached from the data we become, the harder it is to develop the gut feel that&rsquo;s needed when there are challenging decisions to be made.</p>
-    <p>That gut feel comes from having made a connection to something authentic, unexpected and usefully new. Good research provides this by going beyond the expected patterns in people&rsquo;s behaviour, finding the rough edges and giving them room to breathe.</p>
+    <p>For all the tools available to us &mdash; things are getting more abstract and less clear. The more detached from the data we become, the harder it is to develop the gut feel that&rsquo;s needed when there are challenging decisions to be made.</p>
+    <p>Good research restores that feeling by going beyond the surface patterns in people&rsquo;s behaviour and finding the rough edges &mdash; to create something authentic, unexpected and usefully new.</p>
   </main>
 
   <div class="art-wrap">
