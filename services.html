@@ -122,9 +122,15 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   html.js .page-title{ visibility:visible; }
 }
 
-/* mobile: keep the art usefully large; the page may scroll if cramped */
 @media (max-width:767px){
-  .art-wrap{ min-height:42vh; }
+  .art-wrap{
+    min-height:42vh;
+  }
+
+  #art{
+    max-width:95%;
+    max-height:95%;
+  }
 }
 
 /* desktop: lock to one screen - no scroll, wider reading column */
