@@ -51,6 +51,8 @@ body{
 }
 .crumb a{ color:rgba(232,224,212,0.40); text-decoration:none; transition:color .25s ease; }
 .crumb a:hover,.crumb a:focus-visible{ color:var(--green); outline:none; }
+.crumb .sep{ opacity:.5; }
+.crumb .here{ color:var(--cream); }
 
 /* ── header ──────────────────────────────────────────────────────────── */
 .page-head{
@@ -175,7 +177,7 @@ html.js .page-title{ visibility:hidden; }
 </style>
 </head>
 <body>
-<nav class="crumb"><a href="index.html">HOME</a></nav>
+<nav class="crumb"><a href="index.html">HOME</a> <span class="sep">/</span> <a href="services.html">SERVICES</a></nav>
 
 <header class="page-head"><h1 class="page-title">CATEGORIES</h1></header>
 
