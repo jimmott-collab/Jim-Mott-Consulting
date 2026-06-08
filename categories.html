@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>document.documentElement.className = 'js';</script>
+<title>Categories — Jim Mott</title>
+<style>
+:root{
+  --cream:#e8e0d4;
+  --green:#3fc85e;
+  --bg:#0a0a0a;
+}
+
+/* Display font: "Amstrad PC" from The Ultimate Oldschool PC Font Pack
+   by int10h.org — CC BY-SA 4.0. http://int10h.org/oldschool-pc-fonts/ */
+@font-face{
+  font-family:'Amstrad PC';
+  src:url('amstrad-ac.woff2') format('woff2');
+  font-weight:normal;
+  font-style:normal;
+  font-display:swap;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+}
+body{
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:env(safe-area-inset-top) 8px calc(env(safe-area-inset-bottom) + 24px);
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ── breadcrumb — DOS-path wayfinding back up the tree ───────────────── */
+.crumb{
+  position:fixed;
+  top:calc(env(safe-area-inset-top) + 16px);
+  left:calc(env(safe-area-inset-left) + 30px);
+  font-family:'Amstrad PC',monospace;
+  font-size:11px; letter-spacing:0.16em;
+  color:rgba(232,224,212,0.40);
+  z-index:200; -webkit-tap-highlight-color:transparent;
+}
+.crumb a{ color:rgba(232,224,212,0.40); text-decoration:none; transition:color .25s ease; }
+.crumb a:hover,.crumb a:focus-visible{ color:var(--green); outline:none; }
+
+/* ── header ──────────────────────────────────────────────────────────── */
+.page-head{
+  padding-top:clamp(20px,6vh,52px);
+  text-align:center;
+}
+.page-title{
+  font-family:'Amstrad PC',monospace;
+  color:var(--cream);
+  font-size:clamp(16px,4.5vw,22px);
+  font-weight:normal;
+  letter-spacing:0.18em;
+  display:inline-block;
+  white-space:nowrap;
+}
+html.js .page-title{ visibility:hidden; }
+@media (prefers-reduced-motion: reduce){
+  html.js .page-title{ visibility:visible; }
+}
+
+/* ── middle column ───────────────────────────────────────────────────── */
+.middle{
+  flex:1;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(8px,2.4vh,20px);
+  padding-top:clamp(14px,4vh,34px);
+}
+
+/* ── carousel stage ──────────────────────────────────────────────────── */
+.stage{
+  position:relative;
+  width:100%;
+  height:clamp(180px,32vh,260px);
+  touch-action:pan-y;          /* allow vertical scroll, capture horizontal */
+  cursor:grab;
+  user-select:none;
+}
+.stage.dragging{ cursor:grabbing; }
+
+.slide{
+  position:absolute;
+  top:50%; left:50%;
+  width:clamp(180px,40vw,360px);
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:translate(-50%,-50%);
+  transition:transform .55s cubic-bezier(.22,.61,.36,1), opacity .55s ease;
+  will-change:transform,opacity;
+}
+.slide img{
+  position:absolute;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  transition:opacity .5s ease;
+  pointer-events:none;
+}
+.slide img.pix{ image-rendering:pixelated; image-rendering:crisp-edges; }
+
+/* sharp/pixel crossfade is driven by .is-centre on the slide */
+.slide img.sharp{ opacity:0; }
+.slide img.pix{   opacity:1; }
+.slide.is-centre img.sharp{ opacity:1; }
+.slide.is-centre img.pix{   opacity:0; }
+
+/* slot classes set by JS: position relative to active */
+.slide.pos-0  { transform:translate(-50%,-50%) scale(1);   opacity:1; z-index:5; }
+.slide.pos-l1 { transform:translate(calc(-50% - clamp(110px,30vw,300px)),-50%) scale(.6); opacity:.82; z-index:3; }
+.slide.pos-r1 { transform:translate(calc(-50% + clamp(110px,30vw,300px)),-50%) scale(.6); opacity:.82; z-index:3; }
+.slide.pos-l2 { transform:translate(calc(-50% - clamp(180px,48vw,460px)),-50%) scale(.4); opacity:0;   z-index:1; }
+.slide.pos-r2 { transform:translate(calc(-50% + clamp(180px,48vw,460px)),-50%) scale(.4); opacity:0;   z-index:1; }
+
+/* ── active label ────────────────────────────────────────────────────── */
+.cat-label{
+  font-family:'Amstrad PC',monospace;
+  color:var(--cream);
+  font-size:clamp(15px,4.2vw,20px);
+  letter-spacing:0.14em;
+  text-align:center;
+  min-height:1.2em;
+  transition:color .3s ease, opacity .3s ease;
+}
+.cat-label.active{ color:var(--green); }
+
+/* hint shown only before first interaction */
+.hint{
+  font-family:'Amstrad PC',monospace;
+  color:rgba(232,224,212,0.28);
+  font-size:10px; letter-spacing:0.18em;
+  text-align:center;
+  transition:opacity .6s ease;
+}
+.hint.gone{ opacity:0; }
+
+/* ── description panel ───────────────────────────────────────────────── */
+.desc{
+  width:min(620px, 92vw);
+  margin-top:6px;
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  transition:max-height .55s cubic-bezier(.22,.61,.36,1), opacity .45s ease;
+}
+.desc.open{ max-height:60vh; opacity:1; }
+.desc-inner{
+  padding:clamp(10px,2vh,18px) 2px 6px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  color:var(--cream);
+  font-size:clamp(13px,3.6vw,15px);
+  line-height:1.62;
+  text-align:left;
+}
+.desc-inner p{ margin:0 0 0.85em; }
+.desc-inner p:last-child{ margin-bottom:0; }
+.desc-placeholder{ color:rgba(232,224,212,0.45); font-style:italic; }
+</style>
+</head>
+<body>
+<nav class="crumb"><a href="index.html">HOME</a></nav>
+
+<header class="page-head"><h1 class="page-title">CATEGORIES</h1></header>
+
+<main class="middle">
+  <div class="stage" id="stage" aria-label="Category carousel"></div>
+  <div class="cat-label" id="label"></div>
+  <div class="hint" id="hint">tap to read &middot; swipe to browse</div>
+  <section class="desc" id="desc"><div class="desc-inner" id="descInner"></div></section>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ── data ──────────────────────────────────────────────────────────
+     Each category has a sharp image, a pixelated image, a label, and copy.
+     Replace the placeholder copy below as it becomes available. */
+  const CATS = [
+    {
+      slug:'automotive',
+      label:'Automotive',
+      sharp:'automotive.png',
+      pix:'automotive-pixels.png',
+      copy:[
+        "In the last 5 years I have worked with 4 major car brands on UK and European projects, as well as work exploring petrol forecourts, charging networks and attitudes towards electric vehicles.",
+        "All my work in Automotive has been ethnographic. Lots of driving and talking and figuring out all the different ways cars become meaningful in people\u2019s lives \u2013 and how that translates into characteristics and features people actually care about (hint \u2013 Apple play)."
+      ]
+    },
+    {
+      slug:'food-beverages',
+      label:'Food & Beverages',
+      sharp:'food-beverages.png',
+      pix:'food-beverages-pixels.png',
+      copy:[
+        "Food and Beverages is the area where I have done the most amount of future-facing trend work. I\u2019ve helped create and develop numerous annualised global food reports in this space, looking into the influence of trends in flavour, service, sustainability and technology over the category.",
+        "Ethnographic work has also been a joy \u2013 in particular, a series of global studies into whisky consumption with visits to bars and nightclubs in the US, China, Brazil and France."
+      ]
+    },
+    {
+      slug:'hospitality',
+      label:'Hospitality',
+      sharp:'hospitality.png',
+      pix:'hospitality-pixels.png',
+      copy:[
+        "I\u2019ve sat with dozens of people in pubs, bars and restaurants across the UK trying to figure out with them what makes a decent meal out. I\u2019ve had conversations about small plates and cutlery and live music and shit service in the name of helping my hospitality clients hone their offering to the most appealing proposition possible.",
+        "My work has been used to help with everything from brand repositioning to menu design to new concept launches."
+      ]
+    },
+    {
+      slug:'sports-apparel',
+      label:'Sports & Apparel',
+      sharp:'sports-apparel.png',
+      pix:'sports-apparel-pixels.png',
+      copy:[
+        "For the last five years I have been the unsporty person in the room full of sporty people, working on behalf of one of my insight clients for a global sports brand. I\u2019ve worked on strategic audience positioning work globally and across Europe asking big questions like: Does anyone actually enjoy running? Why does the outdoors feel weirdly exclusive and elitist? Who are the different tribes you can find in a gym?",
+        "I\u2019ve helped blow up a lot of misconceptions along the way and created frameworks that talk to everything from comms to product features, to store experience \u2013 right down to the specific pairs of shoes that are most likely to win."
+      ]
+    },
+    {
+      slug:'technology',
+      label:'Technology',
+      sharp:'technology.png',
+      pix:'technology-pixels.png',
+      copy:[
+        "Most of my recent work with technology clients has been to help them understand how to position themselves and their work in the broader context of cultural change. I\u2019ve acted as interim editor for the culture \u2018zine\u2019 of a Mag7 tech brand. I\u2019ve also looked at popular representations of technology in UK culture, how to position agentic AI to the marketplace and applications of AI for life skills development amongst Gen-Z.",
+        "Beyond that I\u2019ve also conducted extensive work in the world of industrial 3-D printing, which has involved lots of conversations about artificial legs, car parts and military technology."
+      ]
+    }
+  ];
+
+  const N = CATS.length;
+  const reduce = window.matchMedia &&
+                 window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const stage     = document.getElementById('stage');
+  const labelEl   = document.getElementById('label');
+  const descEl    = document.getElementById('desc');
+  const descInner = document.getElementById('descInner');
+  const hintEl    = document.getElementById('hint');
+
+  let active = 0;
+  let descOpen = false;
+
+  /* build slides */
+  const slides = CATS.map(function(c){
+    const s = document.createElement('div');
+    s.className = 'slide';
+    s.dataset.slug = c.slug;
+    const pix = new Image();   pix.className='pix';   pix.src=c.pix;   pix.alt='';
+    const sharp = new Image(); sharp.className='sharp'; sharp.src=c.sharp; sharp.alt=c.label;
+    s.appendChild(pix); s.appendChild(sharp);
+    stage.appendChild(s);
+    return s;
+  });
+
+  /* circular offset in range -2..2 */
+  function offsetOf(i){
+    let d = i - active;
+    if(d >  N/2) d -= N;
+    if(d < -N/2) d += N;
+    return d;
+  }
+
+  function render(){
+    slides.forEach(function(s,i){
+      const d = offsetOf(i);
+      s.classList.remove('pos-0','pos-l1','pos-r1','pos-l2','pos-r2','is-centre');
+      if(d === 0){ s.classList.add('pos-0','is-centre'); }
+      else if(d === -1){ s.classList.add('pos-l1'); }
+      else if(d ===  1){ s.classList.add('pos-r1'); }
+      else if(d <= -2){ s.classList.add('pos-l2'); }
+      else { s.classList.add('pos-r2'); }
+      s.setAttribute('aria-hidden', d===0 ? 'false':'true');
+    });
+    labelEl.textContent = CATS[active].label;
+    if(descOpen) fillDesc();
+  }
+
+  function fillDesc(){
+    const c = CATS[active];
+    descInner.innerHTML = '';
+    if(c.copy && c.copy.length){
+      c.copy.forEach(function(par){
+        const p = document.createElement('p');
+        p.textContent = par;
+        descInner.appendChild(p);
+      });
+    } else {
+      const p = document.createElement('p');
+      p.className = 'desc-placeholder';
+      p.textContent = 'Copy for ' + c.label + ' coming soon.';
+      descInner.appendChild(p);
+    }
+  }
+
+  function openDesc(){
+    descOpen = true; fillDesc();
+    descEl.classList.add('open');
+    labelEl.classList.add('active');
+    pause(20000);
+  }
+  function closeDesc(){
+    descOpen = false;
+    descEl.classList.remove('open');
+    labelEl.classList.remove('active');
+  }
+
+  function go(i, fromUser){
+    const next = ((i % N) + N) % N;
+    if(next === active){ return; }
+    active = next;
+    // changing category while open re-fills with the new copy
+    render();
+    if(fromUser) pause(8000);
+  }
+  function next(u){ go(active+1, u); }
+  function prev(u){ go(active-1, u); }
+
+  /* ── auto-rotate ───────────────────────────────────────────────────── */
+  let pauseUntil = 0;
+  function pause(ms){ pauseUntil = Date.now() + ms; }
+  if(!reduce){
+    setInterval(function(){
+      if(descOpen) return;
+      if(Date.now() < pauseUntil) return;
+      next(false);
+    }, 4200);
+  }
+
+  /* ── pointer / swipe / tap ─────────────────────────────────────────── */
+  let downX=0, downY=0, downT=0, dragging=false, moved=false;
+
+  stage.addEventListener('pointerdown', function(e){
+    downX=e.clientX; downY=e.clientY; downT=Date.now();
+    dragging=true; moved=false;
+    stage.classList.add('dragging');
+    pause(8000);
+  });
+  window.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    if(Math.abs(e.clientX-downX) > 8) moved=true;
+  });
+  window.addEventListener('pointerup', function(e){
+    if(!dragging) return;
+    dragging=false;
+    stage.classList.remove('dragging');
+    hideHint();
+    const dx = e.clientX - downX;
+    const dy = e.clientY - downY;
+
+    if(moved && Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0) next(true); else prev(true);
+      return;
+    }
+    if(moved) return; // a vertical scroll / tiny drag — ignore
+
+    // it's a tap — which slide?
+    const slideEl = e.target.closest ? e.target.closest('.slide') : null;
+    if(!slideEl){ return; }
+    const d = offsetOf(slides.indexOf(slideEl));
+    if(d === 0){
+      descOpen ? closeDesc() : openDesc();
+    } else if(d === -1){ prev(true); }
+    else if(d === 1){ next(true); }
+    else { /* far slide, ignore */ }
+  });
+  // cancel a stuck drag if the pointer leaves
+  window.addEventListener('pointercancel', function(){
+    dragging=false; stage.classList.remove('dragging');
+  });
+
+  /* keyboard niceties */
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'){ next(true); hideHint(); }
+    else if(e.key==='ArrowLeft'){ prev(true); hideHint(); }
+    else if(e.key==='Enter'||e.key===' '){ descOpen?closeDesc():openDesc(); }
+  });
+
+  let hintGone=false;
+  function hideHint(){ if(hintGone) return; hintGone=true; hintEl.classList.add('gone'); }
+
+  render();
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(render); }
+})();
+</script>
+
+<!-- typewriter title — matches the rest of the site -->
+<script>
+(function(){
+  var title  = document.querySelector('.page-title');
+  var FULL   = (title.textContent || '').trim();
+  var CURSOR = '\u2588';
+  var reduce = window.matchMedia &&
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function run(){
+    if(reduce){ title.textContent = FULL; title.style.visibility = 'visible'; return; }
+    title.textContent = FULL;
+    title.style.width = title.offsetWidth + 'px';
+    title.style.textAlign = 'left';
+    title.textContent = '';
+    title.style.visibility = 'visible';
+
+    var i = 0, on = true;
+    function render(){ title.textContent = FULL.slice(0, i) + (on ? CURSOR : ''); }
+    var blink = setInterval(function(){ on = !on; render(); }, 260);
+
+    function type(){
+      if(i < FULL.length){ i++; on = true; render(); setTimeout(type, 120); }
+      else { setTimeout(function(){ clearInterval(blink); title.textContent = FULL; }, 900); }
+    }
+    setTimeout(type, 350);
+  }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(run); } else { run(); }
+})();
+</script>
+</body>
+</html>
