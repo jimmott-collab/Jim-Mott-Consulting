@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script>document.documentElement.className = 'js';</script>
+<title>Services — Jim Mott</title>
+<style>
+:root{
+  --cream:#e8e0d4;
+  --green:#3fc85e;
+}
+
+/* Display font: "Amstrad PC" from The Ultimate Oldschool PC Font Pack
+   by int10h.org — CC BY-SA 4.0. http://int10h.org/oldschool-pc-fonts/ */
+@font-face{
+  font-family:'Amstrad PC';
+  src:url('amstrad-ac.woff2') format('woff2');
+  font-weight:normal;
+  font-style:normal;
+  font-display:swap;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+  width:100%;height:100%;
+  background:#000;            /* pure black so the video's black edges vanish into the page */
+  overflow:hidden;
+}
+
+body{
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:env(safe-area-inset-top) 8px env(safe-area-inset-bottom);
+}
+
+/* header */
+.page-head{
+  padding-top:clamp(16px,4vh,40px);
+  text-align:center;
+}
+.page-title{
+  font-family:'Amstrad PC',monospace;
+  color:var(--cream);
+  font-size:clamp(16px,4.5vw,22px);
+  font-weight:normal;
+  letter-spacing:0.18em;
+  display:inline-block;
+  white-space:nowrap;
+}
+html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
+
+/* middle: art + links, centred in the remaining space */
+.middle{
+  flex:1;
+  width:100%;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(14px,3vh,26px);
+}
+
+#art-wrap{
+  flex:1;
+  min-height:0;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#art{
+  max-height:90%;
+  max-width:90%;
+  height:auto;
+  width:auto;
+  display:block;
+}
+
+/* links beneath the art */
+.page-links{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+.page-links a{
+  font-family:'Amstrad PC',monospace;
+  color:var(--cream);
+  font-size:clamp(13px,3.4vw,15px);
+  letter-spacing:0.14em;
+  text-decoration:none;
+  transition:color 0.25s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.page-links a:hover,
+.page-links a:focus-visible{color:var(--green);}
+.page-links a:focus-visible{outline:none;}
+
+@media (prefers-reduced-motion: reduce){
+  html.js .page-title{ visibility:visible; }
+}
+
+  /* breadcrumb — DOS-path wayfinding back up the tree */
+  .crumb{
+    position:fixed;
+    top:calc(env(safe-area-inset-top) + 16px);
+    left:calc(env(safe-area-inset-left) + 30px);
+    padding:0;
+    font-family:'Amstrad PC',monospace;
+    font-size:11px; letter-spacing:0.16em;
+    color:rgba(232,224,212,0.40);
+    z-index:200; -webkit-tap-highlight-color:transparent;
+  }
+  .crumb a{ color:rgba(232,224,212,0.40); text-decoration:none; transition:color .25s ease; }
+  .crumb a:hover,.crumb a:focus-visible{ color:var(--green); outline:none; }
+  .crumb .sep{ opacity:.5; }
+  .crumb .here{ color:var(--cream); }
+</style>
+</head>
+<body>
+<nav class="crumb"><a href="index.html">HOME</a></nav>
+
+<header class="page-head"><h1 class="page-title" id="page-title">SERVICES</h1></header>
+<main class="middle">
+  <div id="art-wrap">
+    <video id="art" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="butterfly-labyrinth-poster.jpg">
+      <source src="butterfly-labyrinth.mp4" type="video/mp4">
+      <source src="butterfly-labyrinth.webm" type="video/webm">
+    </video>
+  </div>
+  <nav class="page-links">
+    <a href="categories.html">Categories</a>
+    <a href="methods.html">Methods</a>
+  </nav>
+</main>
+<script>
+(function(){
+  var title  = document.getElementById('page-title');
+  var FULL   = 'SERVICES';
+  var CURSOR = '\u2588';   // CP437 solid block — the Amstrad cursor
+  var reduce = window.matchMedia &&
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function run(){
+    if(reduce){
+      title.textContent = FULL;
+      title.style.visibility = 'visible';
+      return;
+    }
+    // Lock the title's width to the finished word so it types left-to-right
+    // without the centred header shifting on each keystroke.
+    title.textContent = FULL;
+    title.style.width = title.offsetWidth + 'px';
+    title.style.textAlign = 'left';
+    title.textContent = '';
+    title.style.visibility = 'visible';
+
+    var i = 0, on = true;
+    function render(){ title.textContent = FULL.slice(0, i) + (on ? CURSOR : ''); }
+    var blink = setInterval(function(){ on = !on; render(); }, 260);
+
+    function type(){
+      if(i < FULL.length){
+        i++; on = true; render();
+        setTimeout(type, 120);
+      } else {
+        setTimeout(function(){      // a few cursor blinks, then settle
+          clearInterval(blink);
+          title.textContent = FULL;
+        }, 900);
+      }
+    }
+    setTimeout(type, 350);
+  }
+
+  // Wait for the Amstrad font so the width measurement and glyphs are right
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(run);
+  } else {
+    run();
+  }
+})();
+</script>
+<script>
+(function(){
+  var v=document.getElementById('art');
+  if(!v) return;
+  v.muted=true;                              // iOS requires muted set as property
+  function tryPlay(){ var p=v.play(); if(p&&p.catch){ p.catch(function(){}); } }
+  tryPlay();
+  // some mobiles block autoplay until first interaction or when tab becomes visible
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) tryPlay(); });
+  var once=function(){ tryPlay(); document.removeEventListener('touchstart',once); document.removeEventListener('click',once); };
+  document.addEventListener('touchstart',once,{passive:true});
+  document.addEventListener('click',once);
+})();
+</script>
+</body>
+</html>
