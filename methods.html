@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>document.documentElement.className = 'js';</script>
+<title>Methods — Jim Mott</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&display=swap');
+
+:root{
+  --cream:#e8e0d4;
+  --green:#3fc85e;
+}
+
+/* Display font: "Amstrad PC" from The Ultimate Oldschool PC Font Pack
+   by int10h.org — CC BY-SA 4.0. http://int10h.org/oldschool-pc-fonts/ */
+@font-face{
+  font-family:'Amstrad PC';
+  src:url('amstrad-ac.woff2') format('woff2');
+  font-weight:normal;
+  font-style:normal;
+  font-display:swap;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+  width:100%;
+  background:#000;
+}
+
+/* this page scrolls (more content than About), so no overflow:hidden */
+body{
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:
+    calc(env(safe-area-inset-top) + clamp(64px,12vh,96px))
+    8px
+    calc(env(safe-area-inset-bottom) + clamp(48px,8vh,72px));
+}
+
+/* header (Amstrad) */
+.page-head{
+  text-align:center;
+  margin-bottom:clamp(28px,6vh,48px);
+}
+.page-title{
+  font-family:'Amstrad PC',monospace;
+  color:var(--cream);
+  font-size:clamp(16px,4.5vw,22px);
+  font-weight:normal;
+  letter-spacing:0.18em;
+  display:inline-block;
+  white-space:nowrap;
+}
+html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
+
+/* body copy (Josefin Sans) — same treatment as the About page */
+.body-text{
+  max-width:32rem;
+  text-align:center;
+  padding:0 24px;
+}
+.body-text p{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:300;
+  font-size:clamp(15px,2.2vw,19px);
+  letter-spacing:0.04em;
+  line-height:1.8;
+  color:var(--cream);
+}
+.body-text p + p{ margin-top:1.2em; }
+
+/* dotted divider — echoes the index connector lines */
+.rule{
+  width:clamp(120px,40%,200px);
+  border:none;
+  border-top:1.4px dashed var(--green);
+  opacity:0.6;
+  margin:clamp(34px,6vh,52px) auto;
+}
+
+/* methods — name in Amstrad green, description in Josefin */
+.methods{
+  width:100%;
+  max-width:32rem;
+  padding:0 24px;
+  text-align:center;
+}
+.method{ margin-bottom:clamp(26px,4.5vh,38px); }
+.method:last-child{ margin-bottom:0; }
+.method-name{
+  font-family:'Amstrad PC',monospace;
+  color:var(--green);
+  font-size:clamp(13px,3.4vw,15px);
+  letter-spacing:0.14em;
+  margin-bottom:12px;
+}
+.method-desc{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:300;
+  font-size:clamp(15px,2.2vw,19px);
+  letter-spacing:0.04em;
+  line-height:1.7;
+  color:var(--cream);
+}
+
+@media (prefers-reduced-motion: reduce){
+  html.js .page-title{ visibility:visible; }
+}
+
+/* desktop: wider reading column, left-aligned.
+   the column stays centred in the viewport but its contents flush left,
+   so the title, prose, divider and methods all share one left edge. */
+@media (min-width:768px){
+  .page-head{ text-align:left; }
+  .body-text{ max-width:44rem; text-align:left; padding:0 32px; }
+  .methods{ max-width:44rem; text-align:left; padding:0 32px; }
+  .rule{ margin-left:32px; margin-right:0; }
+}
+
+/* breadcrumb — DOS-path wayfinding back up the tree (matches About) */
+.crumb{
+  position:fixed;
+  top:calc(env(safe-area-inset-top) + 16px);
+  left:calc(env(safe-area-inset-left) + 30px);
+  padding:0;
+  font-family:'Amstrad PC',monospace;
+  font-size:11px; letter-spacing:0.16em;
+  color:rgba(232,224,212,0.40);
+  z-index:200; -webkit-tap-highlight-color:transparent;
+}
+.crumb a{ color:rgba(232,224,212,0.40); text-decoration:none; transition:color .25s ease; }
+.crumb a:hover,.crumb a:focus-visible{ color:var(--green); outline:none; }
+.crumb .sep{ opacity:.5; }
+.crumb .here{ color:var(--cream); }
+</style>
+</head>
+<body>
+<nav class="crumb"><a href="index.html">HOME</a> <span class="sep">/</span> <a href="services.html">SERVICES</a></nav>
+
+<header class="page-head"><h1 class="page-title" id="page-title">METHODS</h1></header>
+
+<main class="body-text">
+  <p>For all the tools and speed available to us &mdash; things are getting more abstract and less clear. The more detached from the data we become, the harder it is to develop the gut feel that&rsquo;s needed when there are challenging decisions to be made.</p>
+
+  <p>That gut feel comes from having made a connection to something authentic, unexpected and usefully new. Good research provides this by going beyond the expected patterns in people&rsquo;s behaviour, finding the rough edges and giving them room to breathe.</p>
+
+  <p>I&rsquo;ve developed a set of skills that leans toward this more exploratory approach. That said, I&rsquo;m method-neutral and happily work with other methods when a project calls for it. I just care about good research.</p>
+</main>
+
+<hr class="rule">
+
+<section class="methods">
+  <div class="method">
+    <div class="method-name">ETHNOGRAPHY</div>
+    <div class="method-desc">Hanging out with people for a long time and doing things with them, rather than just sitting on the sofa.</div>
+  </div>
+
+  <div class="method">
+    <div class="method-name">CULTURAL INSIGHT</div>
+    <div class="method-desc">Unpicking the stories we share about the things we care about, to understand how the narratives can be shifted.</div>
+  </div>
+
+  <div class="method">
+    <div class="method-name">QUALITATIVE RESEARCH</div>
+    <div class="method-desc">Treating people as experts in their own behaviour, and getting them to think and talk deeply about it.</div>
+  </div>
+
+  <div class="method">
+    <div class="method-name">TRENDS ANALYSIS</div>
+    <div class="method-desc">Understanding what feels popular right now, and where it might be going next.</div>
+  </div>
+</section>
+
+<script>
+// title types out with the Amstrad block cursor (same as About)
+(function(){
+  var title  = document.getElementById('page-title');
+  var FULL   = 'METHODS';
+  var CURSOR = '\u2588';   // CP437 solid block — the Amstrad cursor
+  var reduce = window.matchMedia &&
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function run(){
+    if(reduce){ title.textContent = FULL; title.style.visibility = 'visible'; return; }
+    title.textContent = FULL;                 // measure finished width
+    title.style.width = title.offsetWidth + 'px';
+    title.style.textAlign = 'left';
+    title.textContent = '';
+    title.style.visibility = 'visible';
+
+    var i = 0, on = true;
+    function render(){ title.textContent = FULL.slice(0, i) + (on ? CURSOR : ''); }
+    var blink = setInterval(function(){ on = !on; render(); }, 260);
+
+    function type(){
+      if(i < FULL.length){ i++; on = true; render(); setTimeout(type, 120); }
+      else { setTimeout(function(){ clearInterval(blink); title.textContent = FULL; }, 900); }
+    }
+    setTimeout(type, 350);
+  }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(run); } else { run(); }
+})();
+</script>
+
+</body>
+</html>

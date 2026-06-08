@@ -77,18 +77,6 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   justify-content:center;
   gap:clamp(16px,3.2vh,30px);
 }
-#head-wrap{
-  width:100%;
-  max-width:min(200px,46vw);
-  display:flex;
-  justify-content:center;
-}
-#head-wrap video{
-  width:100%;
-  height:auto;
-  display:block;
-  mix-blend-mode:lighten;   /* drops the video's black background into the page */
-}
 
 /* body copy (Josefin Sans) */
 .body-text{
@@ -104,6 +92,7 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   line-height:1.8;
   color:var(--cream);
 }
+.body-text p + p{ margin-top:1.1em; }
 
 /* links beneath the copy (Amstrad) */
 .page-links{
@@ -153,13 +142,10 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 <header class="page-head"><h1 class="page-title" id="page-title">ABOUT</h1></header>
 <main class="middle">
   <div id="stack">
-    <div id="head-wrap">
-      <video id="head" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="poster_square.jpg">
-        <source src="head_square.mp4" type="video/mp4">
-      </video>
-    </div>
     <div class="body-text">
-      <p>My name is Jim Mott. I help my clients make sense of what people think and do, so they can build better things for them.</p>
+      <p>My name is Jim Mott.</p>
+      <p>I have over 15 years of experience working in research.</p>
+      <p>I help my clients make sense of what people think and do, so they can build better things for them. I can design a bespoke project for you, work as an integrated member of your team, or act as a stand-alone researcher to fulfil a specific role.</p>
     </div>
   </div>
   <nav class="page-links">
@@ -204,20 +190,6 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   var u = ['j','i','m','.','m','o','t','t','.','i','s','.','h','e','r','e','@','g','m','a','i','l','.','c','o','m'];
   var a = document.getElementById('mailto-link');
   if(a) a.href = 'mailto:' + u.join('');
-})();
-</script>
-
-<script>
-(function(){
-  var v=document.getElementById('head');
-  if(!v) return;
-  v.muted=true;
-  function go(){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
-  go();
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden) go(); });
-  var once=function(){ go(); document.removeEventListener('touchstart',once); document.removeEventListener('click',once); };
-  document.addEventListener('touchstart',once,{passive:true});
-  document.addEventListener('click',once);
 })();
 </script>
 
