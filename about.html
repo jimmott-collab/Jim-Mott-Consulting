@@ -26,24 +26,34 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 
 html,body{
-  width:100%;height:100%;
+  width:100%;
   background:#000;
-  overflow:hidden;
 }
 
+/* single column: title -> copy -> art -> links, centred in the viewport */
 body{
   min-height:100dvh;
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:env(safe-area-inset-top) 8px env(safe-area-inset-bottom);
+  padding:
+    calc(env(safe-area-inset-top) + clamp(14px,3.5vh,30px))
+    8px
+    calc(env(safe-area-inset-bottom) + clamp(14px,3.5vh,30px));
+}
+.stack{
+  flex:1;
+  width:100%;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(16px,3vh,28px);
 }
 
-/* header (Amstrad) */
-.page-head{
-  padding-top:clamp(16px,4vh,40px);
-  text-align:center;
-}
+/* header */
+.page-head{ text-align:center; }
 .page-title{
   font-family:'Amstrad PC',monospace;
   color:var(--cream);
@@ -55,34 +65,11 @@ body{
 }
 html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 
-/* middle: copy + links */
-.middle{
-  flex:1;
-  width:100%;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(14px,3vh,26px);
-}
-
-#stack{
-  flex:1;
-  min-height:0;
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(16px,3.2vh,30px);
-}
-
-/* body copy (Josefin Sans) */
+/* copy */
 .body-text{
-  max-width:30rem;
+  max-width:min(34rem,92vw);
   text-align:center;
-  padding:0 24px;
+  padding:0 16px;
 }
 .body-text p{
   font-family:'Josefin Sans',sans-serif;
@@ -92,15 +79,35 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   line-height:1.8;
   color:var(--cream);
 }
-.body-text p + p{ margin-top:1.1em; }
+.body-text p + p{ margin-top:0.9em; }
 
-/* links beneath the copy (Amstrad) */
+/* art - the flexible element: shrinks to fill the space left by copy+links */
+.art-wrap{
+  flex:1 1 auto;
+  min-height:0;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.collage{
+  position:relative;
+  width:0; height:0;          /* set by JS (sizeCollage) */
+}
+.collage .layer{
+  position:absolute;
+  display:block;
+  width:100%; height:100%;    /* per-layer % set inline */
+  object-fit:fill;            /* match the source artwork's exact scaling */
+  -webkit-user-select:none; user-select:none; -webkit-user-drag:none;
+}
+
+/* links */
 .page-links{
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:10px;
-  margin-bottom:18px;
 }
 .page-links a{
   font-family:'Amstrad PC',monospace;
@@ -119,7 +126,19 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   html.js .page-title{ visibility:visible; }
 }
 
-/* breadcrumb — DOS-path wayfinding back up the tree */
+/* mobile: keep the art usefully large; the page may scroll if cramped */
+@media (max-width:767px){
+  .art-wrap{ min-height:40vh; }
+}
+
+/* desktop: lock to one screen - no scroll, wider reading column */
+@media (min-width:768px){
+  html,body{ height:100%; overflow:hidden; }
+  body{ height:100dvh; }
+  .body-text{ max-width:46rem; }
+}
+
+/* breadcrumb - DOS-path wayfinding back up the tree */
 .crumb{
   position:fixed;
   top:calc(env(safe-area-inset-top) + 16px);
@@ -139,35 +158,45 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 <body>
 <nav class="crumb"><a href="index.html">HOME</a></nav>
 
-<header class="page-head"><h1 class="page-title" id="page-title">ABOUT</h1></header>
-<main class="middle">
-  <div id="stack">
-    <div class="body-text">
-      <p>My name is Jim Mott.</p>
-      <p>I have over 15 years of experience working in research.</p>
-      <p>I help my clients make sense of what people think and do, so they can build better things for them. 
-      <p> I can design a bespoke project for you, work as an integrated member of your team, or act as a stand-alone researcher to fulfil a specific role.</p>
+<div class="stack">
+  <header class="page-head"><h1 class="page-title" id="page-title">ABOUT</h1></header>
+
+  <main class="body-text">
+    <p>My name is Jim Mott.</p>
+    <p>I have over 15 years of experience working in research.</p>
+    <p>I help my clients make sense of what people think and do, so they can build better things for them.</p>
+  </main>
+
+  <div class="art-wrap">
+    <div class="collage" id="collage">
+      <!-- back -> front. about-figure.gif is the looping "video" layer,
+           sandwiched between two pre-composited (rotated/opacity-baked) plates. -->
+      <img class="layer" src="about-back.png"   alt="" style="left:0;top:0;width:100%;height:100%">
+      <img class="layer" src="about-figure.gif" alt=""
+           style="left:16.12%;top:10.01%;width:66.90%;height:41.08%;transform:rotate(41.54deg);transform-origin:center;">
+      <img class="layer" src="about-front.png"  alt="" style="left:0;top:0;width:100%;height:100%">
     </div>
   </div>
+
   <nav class="page-links">
     <a href="Jim Mott CV_2026.pdf" download="Jim Mott CV 2026.pdf">Download CV</a>
     <a href="https://www.linkedin.com/in/jim-mott-anthro/" target="_blank" rel="noopener">Linkedin</a>
     <a href="#" id="mailto-link">Contact</a>
   </nav>
-</main>
+</div>
 
 <script>
 // title types out with the Amstrad block cursor
 (function(){
   var title  = document.getElementById('page-title');
   var FULL   = 'ABOUT';
-  var CURSOR = '\u2588';   // CP437 solid block — the Amstrad cursor
+  var CURSOR = '\u2588';   // CP437 solid block - the Amstrad cursor
   var reduce = window.matchMedia &&
                window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function run(){
     if(reduce){ title.textContent = FULL; title.style.visibility = 'visible'; return; }
-    title.textContent = FULL;                 // measure finished width
+    title.textContent = FULL;
     title.style.width = title.offsetWidth + 'px';
     title.style.textAlign = 'left';
     title.textContent = '';
@@ -184,6 +213,30 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
     setTimeout(type, 350);
   }
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(run); } else { run(); }
+})();
+
+// size the collage to fit its container while holding the source aspect (819:1198)
+(function(){
+  var BW = 819, BH = 1198;
+  function sizeCollage(){
+    var wrap = document.querySelector('.art-wrap');
+    var col  = document.getElementById('collage');
+    if(!wrap || !col) return;
+    var availW = wrap.clientWidth;
+    var availH = wrap.clientHeight;
+    if(availW <= 0 || availH <= 0){ setTimeout(sizeCollage, 50); return; }
+    var scale = Math.min(availW / BW, availH / BH);
+    col.style.width  = (BW * scale) + 'px';
+    col.style.height = (BH * scale) + 'px';
+  }
+  window.addEventListener('resize', sizeCollage, {passive:true});
+  window.addEventListener('load', sizeCollage);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(sizeCollage); }
+  if('ResizeObserver' in window){
+    var w = document.querySelector('.art-wrap');
+    if(w) new ResizeObserver(sizeCollage).observe(w);
+  }
+  sizeCollage();
 })();
 
 // email assembled at runtime so the address isn't sitting in the markup for scrapers

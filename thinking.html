@@ -25,39 +25,35 @@
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
-html{ scroll-behavior:smooth; }
-
 html,body{
   width:100%;
   background:#0a0a0a;
 }
 
+/* single column: title -> copy -> art -> links, centred in the viewport */
 body{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-/* ── screen 1 — the hero. Title + the mask animation, filling the viewport
-   exactly as the page does now. ── */
-.hero{
-  position:relative;          /* anchors the scroll cue to the bottom edge */
-  width:100%;
   min-height:100dvh;
   display:flex;
   flex-direction:column;
   align-items:center;
   padding:
-    env(safe-area-inset-top)
+    calc(env(safe-area-inset-top) + clamp(14px,3.5vh,30px))
     8px
-    calc(env(safe-area-inset-bottom) + clamp(64px,11vh,92px));
+    calc(env(safe-area-inset-bottom) + clamp(14px,3.5vh,30px));
+}
+.stack{
+  flex:1;
+  width:100%;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(16px,3vh,26px);
 }
 
 /* header */
-.page-head{
-  padding-top:clamp(16px,4vh,40px);
-  text-align:center;
-}
+.page-head{ text-align:center; }
 .page-title{
   font-family:'Amstrad PC',monospace;
   color:var(--cream);
@@ -69,20 +65,17 @@ body{
 }
 html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 @media (prefers-reduced-motion: reduce){
-  html{ scroll-behavior:auto; }
   html.js .page-title{ visibility:visible; }
-  .cue-glyph{ opacity:.78; animation:none; }
 }
 
-/* middle: mask + links, centred in the remaining space */
-.middle{
-  flex:1;
+/* art - the flexible element: shrinks to fill the space left by copy+links */
+.art-wrap{
+  flex:1 1 auto;
+  min-height:0;
   width:100%;
   display:flex;
-  flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:clamp(14px,3vh,26px);
 }
 
 #cv-wrap{position:relative;display:inline-block;}
@@ -108,72 +101,11 @@ canvas{display:block;}
 .page-links a:focus-visible{color:var(--green);}
 .page-links a:focus-visible{outline:none;}
 
-/* ── the scroll cue — a big Amstrad block-arrow pinned to the bottom of
-   the hero. Fades in after the title settles, blinks a few times, then
-   rests with a slow bob; fades out once the reader scrolls. ── */
-.cue{
-  position:absolute;
-  left:50%;
-  bottom:calc(env(safe-area-inset-bottom) + clamp(14px,3vh,28px));
-  transform:translateX(-50%);
-  display:block;
-  padding:10px 16px;
-  text-decoration:none;
-  -webkit-tap-highlight-color:transparent;
-  transition:opacity .5s ease;
-  z-index:20;
-}
-.cue-glyph{
-  display:block;
-  font-family:'Amstrad PC',monospace;
-  font-size:clamp(30px,8vw,44px);
-  line-height:1;
-  color:var(--green);
-  opacity:0;
-  animation:
-    cue-reveal 3.2s ease-in-out 1.6s forwards,
-    cue-bob    2.4s ease-in-out 1.6s infinite;
-}
-.cue:hover .cue-glyph,
-.cue:focus-visible .cue-glyph{ color:var(--cream); }
-.cue:focus-visible{ outline:none; }
-.cue.cue-hidden{ opacity:0; pointer-events:none; }
-
-@keyframes cue-reveal{
-  0%  { opacity:0;   }
-  18% { opacity:1;   }
-  30% { opacity:.18; }
-  42% { opacity:1;   }
-  54% { opacity:.18; }
-  66% { opacity:1;   }
-  78% { opacity:.18; }
-  100%{ opacity:.78; }
-}
-@keyframes cue-bob{
-  0%,100%{ transform:translateY(0); }
-  50%    { transform:translateY(5px); }
-}
-
-/* ── screen 2 — the reward. Intro line + the two writing projects, each
-   laid out like the Methods blocks: the link as the Amstrad heading, the
-   description in Josefin underneath. ── */
-.panel{
-  width:100%;
-  min-height:100dvh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(28px,6vh,48px);
-  padding:
-    calc(env(safe-area-inset-top) + clamp(48px,8vh,72px))
-    8px
-    calc(env(safe-area-inset-bottom) + clamp(48px,8vh,72px));
-}
+/* copy */
 .body-text{
-  max-width:32rem;
+  max-width:min(34rem,92vw);
   text-align:center;
-  padding:0 24px;
+  padding:0 16px;
 }
 .body-text p{
   font-family:'Josefin Sans',sans-serif;
@@ -184,13 +116,15 @@ canvas{display:block;}
   color:var(--cream);
 }
 
+/* ── the two writing projects, laid out like the Methods blocks: the link
+   as the Amstrad heading, the description in Josefin underneath. ── */
 .works{
   width:100%;
   max-width:32rem;
   padding:0 24px;
   text-align:center;
 }
-.work{ margin-bottom:clamp(26px,4.5vh,38px); }
+.work{ margin-bottom:clamp(14px,2.5vh,22px); }
 .work:last-child{ margin-bottom:0; }
 .work-link{
   display:inline-block;
@@ -214,11 +148,27 @@ canvas{display:block;}
   line-height:1.7;
   color:var(--cream);
 }
+.works-note{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:300;
+  font-size:clamp(14px,2vw,17px);
+  letter-spacing:0.04em;
+  color:var(--cream);
+  opacity:0.65;
+  margin-top:clamp(12px,2.5vh,20px);
+}
 
-/* desktop: wider reading column, left-aligned to match Methods */
+/* mobile: keep the mask usefully large; the page may scroll if cramped */
+@media (max-width:767px){
+  .art-wrap{ min-height:36vh; }
+}
+
+/* desktop: lock to one screen - no scroll, wider reading column */
 @media (min-width:768px){
-  .body-text{ max-width:44rem; text-align:left; padding:0 32px; }
-  .works{ max-width:44rem; text-align:left; padding:0 32px; }
+  html,body{ height:100%; overflow:hidden; }
+  body{ height:100dvh; }
+  .body-text{ max-width:46rem; }
+  .works{ max-width:46rem; }
 }
 
   /* breadcrumb — DOS-path wayfinding back up the tree */
@@ -241,18 +191,16 @@ canvas{display:block;}
 <body>
 <nav class="crumb"><a href="index.html">HOME</a></nav>
 
-<section class="hero">
+<div class="stack">
   <header class="page-head"><h1 class="page-title">THINKING</h1></header>
-  <main class="middle">
-    <div id="cv-wrap"><canvas id="gc"></canvas><canvas id="fc" style="position:absolute;top:0;left:0;pointer-events:none;mix-blend-mode:color-burn;z-index:10;"></canvas></div>
-  </main>
-  <a class="cue" href="#more" aria-label="Scroll down for more"><span class="cue-glyph">&#x2193;</span></a>
-</section>
 
-<section class="panel" id="more">
   <main class="body-text">
-    <p>When I have the time I like to read books and write.</p>
+    <p>Overspill from the thinking I do for my projects. Plus independent thinking on culture, technology and the practice of ethnographic research.</p>
   </main>
+
+  <div class="art-wrap">
+    <div id="cv-wrap"><canvas id="gc"></canvas><canvas id="fc" style="position:absolute;top:0;left:0;pointer-events:none;mix-blend-mode:color-burn;z-index:10;"></canvas></div>
+  </div>
 
   <section class="works">
     <div class="work">
@@ -263,12 +211,9 @@ canvas{display:block;}
       <a class="work-link" href="https://luckybaboon.substack.com/" target="_blank" rel="noopener noreferrer">SHIFTING DULLNESS</a>
       <div class="work-desc">A mix of bigger think pieces (mainly around AI at the moment) and more personal reflections on Ethnography and Anthropology.</div>
     </div>
+    <p class="works-note">All of it remains a work in progress.</p>
   </section>
-
-  <main class="body-text">
-    <p>All of it remains a work in progress.</p>
-  </main>
-</section>
+</div>
 <script>
 (function(){
 const W=480,H=480,bs=13;
@@ -277,19 +222,17 @@ const canvas=document.getElementById('gc');
 canvas.width=W;canvas.height=H;
 const ctx=canvas.getContext('2d');
 
-// Scale canvas to fill available screen while preserving aspect ratio
+// Scale the mask to fit its container while preserving aspect ratio
 function resizeCanvas(){
-  const head=document.querySelector('.page-head');
-  const hero=document.querySelector('.hero');
-  const headH=head?head.offsetHeight:0;
-  const padB=hero?(parseFloat(getComputedStyle(hero).paddingBottom)||0):0;
-  const vMargin=24; // breathing room above the cue band
-  const availH=Math.max(120, window.innerHeight - headH - padB - vMargin);
-  const availW=window.innerWidth - 24;
+  const wrap=document.querySelector('.art-wrap');
+  if(!wrap) return;
+  const availW=wrap.clientWidth;
+  const availH=wrap.clientHeight;
+  if(availW<=0||availH<=0){ setTimeout(resizeCanvas,50); return; }
   const scale=Math.min(availW/W, availH/H);
-  const wrap=document.getElementById('cv-wrap');
-  wrap.style.width=(W*scale)+'px';
-  wrap.style.height=(H*scale)+'px';
+  const cw=document.getElementById('cv-wrap');
+  cw.style.width=(W*scale)+'px';
+  cw.style.height=(H*scale)+'px';
   canvas.style.width='100%';
   canvas.style.height='100%';
   document.getElementById('fc').style.width='100%';
@@ -301,6 +244,11 @@ setTimeout(resizeCanvas,100);
 window.addEventListener('resize',resizeCanvas);
 // Re-run once the Amstrad font loads (header/link heights change)
 if(document.fonts && document.fonts.ready){ document.fonts.ready.then(resizeCanvas); }
+// React to the container resizing as copy/links reflow
+if('ResizeObserver' in window){
+  const w=document.querySelector('.art-wrap');
+  if(w) new ResizeObserver(resizeCanvas).observe(w);
+}
 
 const DOM=0.40,GLITCH=0.43,SPEED=10;
 
@@ -959,18 +907,6 @@ document.addEventListener('keydown',e=>{
     setTimeout(type, 350);
   }
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(run); } else { run(); }
-})();
-</script>
-<script>
-// fade the cue away once the reader has started to scroll past the hero
-(function(){
-  var cue=document.querySelector('.cue');
-  if(!cue) return;
-  function onScroll(){
-    if(window.scrollY > window.innerHeight*0.35){ cue.classList.add('cue-hidden'); }
-    else { cue.classList.remove('cue-hidden'); }
-  }
-  window.addEventListener('scroll',onScroll,{passive:true});
 })();
 </script>
 </body>

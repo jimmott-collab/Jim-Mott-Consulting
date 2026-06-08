@@ -25,36 +25,35 @@
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
-html{ scroll-behavior:smooth; }
-
 html,body{
   width:100%;
   background:#000;            /* pure black so the video's black edges vanish into the page */
 }
 
+/* single column: title -> copy -> art -> links, centred in the viewport */
 body{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-/* ── screen 1 — the hero. Fills the viewport exactly as the page does now,
-   so on load Services is still just the title + the video, nothing else. ── */
-.hero{
-  position:relative;          /* anchors the scroll cue to the bottom edge */
-  width:100%;
   min-height:100dvh;
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:env(safe-area-inset-top) 8px env(safe-area-inset-bottom);
+  padding:
+    calc(env(safe-area-inset-top) + clamp(14px,3.5vh,30px))
+    8px
+    calc(env(safe-area-inset-bottom) + clamp(14px,3.5vh,30px));
+}
+.stack{
+  flex:1;
+  width:100%;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(16px,3vh,28px);
 }
 
 /* header */
-.page-head{
-  padding-top:clamp(16px,4vh,40px);
-  text-align:center;
-}
+.page-head{ text-align:center; }
 .page-title{
   font-family:'Amstrad PC',monospace;
   color:var(--cream);
@@ -66,87 +65,11 @@ body{
 }
 html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 
-#art-wrap{
-  flex:1;
-  min-height:0;
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-#art{
-  max-height:90%;
-  max-width:90%;
-  height:auto;
-  width:auto;
-  display:block;
-}
-
-/* ── the scroll cue — a big Amstrad block-arrow pinned to the bottom of
-   the hero. It fades in after the title settles, blinks a few times to
-   say "click me", then rests with a slow bob. ── */
-.cue{
-  position:absolute;
-  left:50%;
-  bottom:calc(env(safe-area-inset-bottom) + clamp(14px,3vh,28px));
-  transform:translateX(-50%);
-  display:block;
-  padding:10px 16px;                 /* a comfortable tap target */
-  text-decoration:none;
-  -webkit-tap-highlight-color:transparent;
-  transition:opacity .5s ease;       /* wrapper handles the fade-out on scroll */
-}
-.cue-glyph{
-  display:block;
-  font-family:'Amstrad PC',monospace;
-  font-size:clamp(30px,8vw,44px);
-  line-height:1;
-  color:var(--green);
-  opacity:0;                         /* invisible through the animation delay */
-  animation:
-    cue-reveal 3.2s ease-in-out 1.6s forwards,
-    cue-bob    2.4s ease-in-out 1.6s infinite;
-}
-.cue:hover .cue-glyph,
-.cue:focus-visible .cue-glyph{ color:var(--cream); }
-.cue:focus-visible{ outline:none; }
-.cue.cue-hidden{ opacity:0; pointer-events:none; }
-
-@keyframes cue-reveal{
-  0%  { opacity:0;   }
-  18% { opacity:1;   }   /* arrive */
-  30% { opacity:.18; }   /* blink… */
-  42% { opacity:1;   }
-  54% { opacity:.18; }
-  66% { opacity:1;   }
-  78% { opacity:.18; }
-  100%{ opacity:.78; }   /* settle */
-}
-@keyframes cue-bob{
-  0%,100%{ transform:translateY(0); }
-  50%    { transform:translateY(5px); }
-}
-
-/* ── screen 2 — the reward. Copy + the onward links, centred in its own
-   full viewport so the scroll lands on something composed, not a scrap. ── */
-.panel{
-  width:100%;
-  min-height:100dvh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(20px,5vh,40px);
-  padding:
-    calc(env(safe-area-inset-top) + clamp(48px,8vh,72px))
-    8px
-    calc(env(safe-area-inset-bottom) + clamp(48px,8vh,72px));
-}
-
+/* copy */
 .body-text{
-  max-width:32rem;
+  max-width:min(34rem,92vw);
   text-align:center;
-  padding:0 24px;
+  padding:0 16px;
 }
 .body-text p{
   font-family:'Josefin Sans',sans-serif;
@@ -156,9 +79,26 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   line-height:1.8;
   color:var(--cream);
 }
-.body-text p + p{ margin-top:1.2em; }
+.body-text p + p{ margin-top:0.9em; }
 
-/* onward links (Amstrad) */
+/* art - the flexible element: shrinks to fill the space left by copy+links */
+.art-wrap{
+  flex:1 1 auto;
+  min-height:0;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#art{
+  max-height:100%;
+  max-width:100%;
+  height:auto;
+  width:auto;
+  display:block;
+}
+
+/* links */
 .page-links{
   display:flex;
   flex-direction:column;
@@ -179,17 +119,22 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 .page-links a:focus-visible{outline:none;}
 
 @media (prefers-reduced-motion: reduce){
-  html{ scroll-behavior:auto; }
   html.js .page-title{ visibility:visible; }
-  .cue-glyph{ opacity:.78; animation:none; }
 }
 
-/* desktop: wider reading column, left-aligned to match Methods */
+/* mobile: keep the art usefully large; the page may scroll if cramped */
+@media (max-width:767px){
+  .art-wrap{ min-height:34vh; }
+}
+
+/* desktop: lock to one screen - no scroll, wider reading column */
 @media (min-width:768px){
-  .body-text{ max-width:44rem; text-align:left; padding:0 32px; }
+  html,body{ height:100%; overflow:hidden; }
+  body{ height:100dvh; }
+  .body-text{ max-width:46rem; }
 }
 
-/* breadcrumb — DOS-path wayfinding back up the tree */
+/* breadcrumb - DOS-path wayfinding back up the tree */
 .crumb{
   position:fixed;
   top:calc(env(safe-area-inset-top) + 16px);
@@ -209,43 +154,38 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 <body>
 <nav class="crumb"><a href="index.html">HOME</a></nav>
 
-<section class="hero">
+<div class="stack">
   <header class="page-head"><h1 class="page-title" id="page-title">SERVICES</h1></header>
-  <div id="art-wrap">
+
+  <main class="body-text">
+    <p>For all the tools and speed available to us &mdash; things are getting more abstract and less clear. The more detached from the data we become, the harder it is to develop the gut feel that&rsquo;s needed when there are challenging decisions to be made.</p>
+    <p>That gut feel comes from having made a connection to something authentic, unexpected and usefully new. Good research provides this by going beyond the expected patterns in people&rsquo;s behaviour, finding the rough edges and giving them room to breathe.</p>
+  </main>
+
+  <div class="art-wrap">
     <video id="art" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="butterfly-labyrinth-poster.jpg">
       <source src="butterfly-labyrinth.mp4" type="video/mp4">
       <source src="butterfly-labyrinth.webm" type="video/webm">
     </video>
   </div>
-  <a class="cue" href="#more" aria-label="Scroll down for more"><span class="cue-glyph">&#x2193;</span></a>
-</section>
 
-<section class="panel" id="more">
-  <main class="body-text">
-    <p>For all the tools and speed available to us &mdash; things are getting more abstract and less clear. The more detached from the data we become, the harder it is to develop the gut feel that&rsquo;s needed when there are challenging decisions to be made.</p>
-    <p>That gut feel comes from having made a connection to something authentic, unexpected and usefully new. Good research provides this by going beyond the expected patterns in people&rsquo;s behaviour, finding the rough edges and giving them room to breathe.</p>
-  </main>
   <nav class="page-links">
     <a href="categories.html">Categories</a>
     <a href="methods.html">Methods</a>
   </nav>
-</section>
+</div>
 
 <script>
 // title types out with the Amstrad block cursor
 (function(){
   var title  = document.getElementById('page-title');
   var FULL   = 'SERVICES';
-  var CURSOR = '\u2588';   // CP437 solid block — the Amstrad cursor
+  var CURSOR = '\u2588';   // CP437 solid block - the Amstrad cursor
   var reduce = window.matchMedia &&
                window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function run(){
-    if(reduce){
-      title.textContent = FULL;
-      title.style.visibility = 'visible';
-      return;
-    }
+    if(reduce){ title.textContent = FULL; title.style.visibility = 'visible'; return; }
     title.textContent = FULL;
     title.style.width = title.offsetWidth + 'px';
     title.style.textAlign = 'left';
@@ -257,23 +197,15 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
     var blink = setInterval(function(){ on = !on; render(); }, 260);
 
     function type(){
-      if(i < FULL.length){
-        i++; on = true; render();
-        setTimeout(type, 120);
-      } else {
-        setTimeout(function(){
-          clearInterval(blink);
-          title.textContent = FULL;
-        }, 900);
-      }
+      if(i < FULL.length){ i++; on = true; render(); setTimeout(type, 120); }
+      else { setTimeout(function(){ clearInterval(blink); title.textContent = FULL; }, 900); }
     }
     setTimeout(type, 350);
   }
-
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(run); } else { run(); }
 })();
 
-// video autoplay (unchanged)
+// video autoplay
 (function(){
   var v=document.getElementById('art');
   if(!v) return;
@@ -284,17 +216,6 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
   var once=function(){ tryPlay(); document.removeEventListener('touchstart',once); document.removeEventListener('click',once); };
   document.addEventListener('touchstart',once,{passive:true});
   document.addEventListener('click',once);
-})();
-
-// fade the cue away once the reader has started to scroll past the hero
-(function(){
-  var cue=document.querySelector('.cue');
-  if(!cue) return;
-  function onScroll(){
-    if(window.scrollY > window.innerHeight*0.35){ cue.classList.add('cue-hidden'); }
-    else { cue.classList.remove('cue-hidden'); }
-  }
-  window.addEventListener('scroll',onScroll,{passive:true});
 })();
 </script>
 
