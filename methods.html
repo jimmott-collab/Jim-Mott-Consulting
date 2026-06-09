@@ -137,6 +137,20 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 .crumb a:hover,.crumb a:focus-visible{ color:var(--green); outline:none; }
 .crumb .sep{ opacity:.5; }
 .crumb .here{ color:var(--cream); }
+
+/* fixed contact — mirrors the HOME crumb, bottom-right, in green */
+.contact{
+  position:fixed;
+  bottom:calc(env(safe-area-inset-bottom) + 16px);
+  right:calc(env(safe-area-inset-right) + 30px);
+  font-family:'Amstrad PC',monospace;
+  font-size:11px; letter-spacing:0.16em;
+  color:var(--green);
+  text-decoration:none;
+  z-index:200; -webkit-tap-highlight-color:transparent;
+  transition:color .25s ease;
+}
+.contact:hover,.contact:focus-visible{ color:var(--cream); outline:none; }
 </style>
 </head>
 <body>
@@ -203,5 +217,41 @@ html.js .page-title{ visibility:hidden; }   /* hidden until it types out */
 })();
 </script>
 
+<a class="contact" id="contactLink" href="#" rel="nofollow" aria-label="Contact — email Jim Mott">CONTACT</a>
+<script>
+// contact — copies the address on click (works with no mail app) and also fires mailto.
+// address assembled at runtime so it isn't sitting in the markup for scrapers.
+(function(){
+  var email = ['jim','mott','is','here'].join('.') + '@' + 'gmail.com';
+  var link = document.getElementById('contactLink');
+  if(!link) return;
+  link.href = 'mailto:' + email;
+  var revert = null;
+  function flash(msg){
+    if(revert) clearTimeout(revert);
+    link.textContent = msg;
+    revert = setTimeout(function(){ link.textContent = 'CONTACT'; }, 2600);
+  }
+  link.addEventListener('click', function(){
+    var copied = false;
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(email); copied = true;
+      }
+    }catch(_){}
+    if(!copied){
+      try{
+        var ta = document.createElement('textarea');
+        ta.value = email; ta.setAttribute('readonly','');
+        ta.style.position='absolute'; ta.style.left='-9999px';
+        document.body.appendChild(ta); ta.select();
+        copied = document.execCommand('copy'); document.body.removeChild(ta);
+      }catch(_){}
+    }
+    flash(copied ? 'copied ✓' : email);
+    // mailto still fires natively via href — no preventDefault
+  });
+})();
+</script>
 </body>
 </html>

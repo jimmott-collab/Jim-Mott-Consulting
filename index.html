@@ -141,8 +141,23 @@
     html.js .masthead { visibility: visible; }
     html.js #assembly { opacity: 1; }
     html.js .subhead  { opacity: 1; }
+    html.js .contact  { opacity: 1; }
     #assembly.reveal  { animation: none; }
   }
+  /* fixed contact — mirrors the HOME crumb on interior pages, bottom-right, green */
+  .contact{
+    position:fixed;
+    bottom:calc(env(safe-area-inset-bottom) + 16px);
+    right:calc(env(safe-area-inset-right) + 30px);
+    font-family:'Amstrad PC',monospace;
+    font-size:11px; letter-spacing:0.16em;
+    color:var(--green);
+    text-decoration:none;
+    z-index:200; -webkit-tap-highlight-color:transparent;
+    transition:color .25s ease, opacity 1s ease;
+  }
+  .contact:hover,.contact:focus-visible{ color:var(--cream); outline:none; }
+  html.js .contact{ opacity:0; }   /* fades in with the boot reveal */
 </style>
 </head>
 <body>
@@ -212,6 +227,7 @@
         mast.style.visibility = 'visible';
         if (subhead) subhead.style.opacity = '1';
         assembly.style.opacity = '1';
+        var c0 = document.getElementById('contactLink'); if (c0) c0.style.opacity = '1';
         return;
       }
 
@@ -238,6 +254,7 @@
             mast.textContent = FULL;       // settle, no cursor
             if (subhead) subhead.style.opacity = '1';   // fade in the tagline
             assembly.classList.add('reveal');
+            var c1 = document.getElementById('contactLink'); if (c1) c1.style.opacity = '1';
           }, 780);
         }
       }
@@ -254,5 +271,36 @@
   })();
   </script>
 
+<a class="contact" id="contactLink" href="#" rel="nofollow" aria-label="Contact — email Jim Mott">CONTACT</a>
+<script>
+(function(){
+  var email = ['jim','mott','is','here'].join('.') + '@' + 'gmail.com';
+  var link = document.getElementById('contactLink');
+  if(!link) return;
+  link.href = 'mailto:' + email;
+  var revert = null;
+  function flash(msg){
+    if(revert) clearTimeout(revert);
+    link.textContent = msg;
+    revert = setTimeout(function(){ link.textContent = 'CONTACT'; }, 2600);
+  }
+  link.addEventListener('click', function(){
+    var copied = false;
+    try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(email); copied = true; } }catch(_){}
+    if(!copied){
+      try{
+        var ta = document.createElement('textarea');
+        ta.value = email; ta.setAttribute('readonly','');
+        ta.style.position='absolute'; ta.style.left='-9999px';
+        document.body.appendChild(ta); ta.select();
+        copied = document.execCommand('copy'); document.body.removeChild(ta);
+      }catch(_){}
+    }
+    flash(copied ? 'copied \u2713' : email);
+  });
+  // safety net: appear even if the boot sequence never fires
+  setTimeout(function(){ link.style.opacity = '1'; }, 5000);
+})();
+</script>
 </body>
 </html>

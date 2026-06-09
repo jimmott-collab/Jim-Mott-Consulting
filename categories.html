@@ -173,7 +173,30 @@ html.js .page-title{ visibility:hidden; }
 }
 .desc-inner p{ margin:0 0 0.85em; }
 .desc-inner p:last-child{ margin-bottom:0; }
+.desc-brands{
+  font-family:'Amstrad PC',monospace;
+  color:var(--green);
+  font-size:11px;
+  letter-spacing:0.12em;
+  line-height:1.5;
+  margin-bottom:clamp(10px,2.2vh,16px);
+  text-align:left;
+}
 .desc-placeholder{ color:rgba(232,224,212,0.45); font-style:italic; }
+
+/* fixed contact — mirrors the HOME crumb, bottom-right, in green */
+.contact{
+  position:fixed;
+  bottom:calc(env(safe-area-inset-bottom) + 16px);
+  right:calc(env(safe-area-inset-right) + 30px);
+  font-family:'Amstrad PC',monospace;
+  font-size:11px; letter-spacing:0.16em;
+  color:var(--green);
+  text-decoration:none;
+  z-index:200; -webkit-tap-highlight-color:transparent;
+  transition:color .25s ease;
+}
+.contact:hover,.contact:focus-visible{ color:var(--cream); outline:none; }
 </style>
 </head>
 <body>
@@ -201,6 +224,7 @@ html.js .page-title{ visibility:hidden; }
       label:'Automotive',
       sharp:'automotive.png',
       pix:'automotive-pixels.png',
+      brands:["Toyota","Lexus","Ford"],
       copy:[
         "In the last 5 years I have worked with 4 major car brands on UK and European projects, as well as work exploring petrol forecourts, charging networks and attitudes towards electric vehicles.",
         "All my work in Automotive has been ethnographic. Lots of driving and talking and figuring out all the different ways cars become meaningful in people\u2019s lives \u2013 and how that translates into characteristics and features people actually care about (hint \u2013 Apple play)."
@@ -211,6 +235,7 @@ html.js .page-title{ visibility:hidden; }
       label:'Food & Beverages',
       sharp:'food-beverages.png',
       pix:'food-beverages-pixels.png',
+      brands:["Givaudan","Pernod Ricard"],
       copy:[
         "Food and Beverages is the area where I have done the most amount of future-facing trend work. I\u2019ve helped create and develop numerous annualised global food reports in this space, looking into the influence of trends in flavour, service, sustainability and technology over the category.",
         "Ethnographic work has also been a joy \u2013 in particular, a series of global studies into whisky consumption with visits to bars and nightclubs in the US, China, Brazil and France."
@@ -221,6 +246,7 @@ html.js .page-title{ visibility:hidden; }
       label:'Hospitality',
       sharp:'hospitality.png',
       pix:'hospitality-pixels.png',
+      brands:["McDonalds","Lounges","The Botanist"],
       copy:[
         "I\u2019ve sat with dozens of people in pubs, bars and restaurants across the UK trying to figure out with them what makes a decent meal out. I\u2019ve had conversations about small plates and cutlery and live music and shit service in the name of helping my hospitality clients hone their offering to the most appealing proposition possible.",
         "My work has been used to help with everything from brand repositioning to menu design to new concept launches."
@@ -231,6 +257,7 @@ html.js .page-title{ visibility:hidden; }
       label:'Sports & Apparel',
       sharp:'sports-apparel.png',
       pix:'sports-apparel-pixels.png',
+      brands:["adidas","Puma","The North Face"],
       copy:[
         "For the last five years I have been the unsporty person in the room full of sporty people, working on behalf of one of my insight clients for a global sports brand. I\u2019ve worked on strategic audience positioning work globally and across Europe asking big questions like: Does anyone actually enjoy running? Why does the outdoors feel weirdly exclusive and elitist? Who are the different tribes you can find in a gym?",
         "I\u2019ve helped blow up a lot of misconceptions along the way and created frameworks that talk to everything from comms to product features, to store experience \u2013 right down to the specific pairs of shoes that are most likely to win."
@@ -241,6 +268,7 @@ html.js .page-title{ visibility:hidden; }
       label:'Technology',
       sharp:'technology.png',
       pix:'technology-pixels.png',
+      brands:["Google","HP","Microsoft"],
       copy:[
         "Most of my recent work with technology clients has been to help them understand how to position themselves and their work in the broader context of cultural change. I\u2019ve acted as interim editor for the culture \u2018zine\u2019 of a Mag7 tech brand. I\u2019ve also looked at popular representations of technology in UK culture, how to position agentic AI to the marketplace and applications of AI for life skills development amongst Gen-Z.",
         "Beyond that I\u2019ve also conducted extensive work in the world of industrial 3-D printing, which has involved lots of conversations about artificial legs, car parts and military technology."
@@ -299,6 +327,12 @@ html.js .page-title{ visibility:hidden; }
   function fillDesc(){
     const c = CATS[active];
     descInner.innerHTML = '';
+    if(c.brands && c.brands.length){
+      const b = document.createElement('div');
+      b.className = 'desc-brands';
+      b.textContent = 'such as: ' + c.brands.join(', ');
+      descInner.appendChild(b);
+    }
     if(c.copy && c.copy.length){
       c.copy.forEach(function(par){
         const p = document.createElement('p');
@@ -432,6 +466,42 @@ html.js .page-title{ visibility:hidden; }
     setTimeout(type, 350);
   }
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(run); } else { run(); }
+})();
+</script>
+<a class="contact" id="contactLink" href="#" rel="nofollow" aria-label="Contact — email Jim Mott">CONTACT</a>
+<script>
+// contact — copies the address on click (works with no mail app) and also fires mailto.
+// address assembled at runtime so it isn't sitting in the markup for scrapers.
+(function(){
+  var email = ['jim','mott','is','here'].join('.') + '@' + 'gmail.com';
+  var link = document.getElementById('contactLink');
+  if(!link) return;
+  link.href = 'mailto:' + email;
+  var revert = null;
+  function flash(msg){
+    if(revert) clearTimeout(revert);
+    link.textContent = msg;
+    revert = setTimeout(function(){ link.textContent = 'CONTACT'; }, 2600);
+  }
+  link.addEventListener('click', function(){
+    var copied = false;
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(email); copied = true;
+      }
+    }catch(_){}
+    if(!copied){
+      try{
+        var ta = document.createElement('textarea');
+        ta.value = email; ta.setAttribute('readonly','');
+        ta.style.position='absolute'; ta.style.left='-9999px';
+        document.body.appendChild(ta); ta.select();
+        copied = document.execCommand('copy'); document.body.removeChild(ta);
+      }catch(_){}
+    }
+    flash(copied ? 'copied ✓' : email);
+    // mailto still fires natively via href — no preventDefault
+  });
 })();
 </script>
 </body>
