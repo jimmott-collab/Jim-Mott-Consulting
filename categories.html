@@ -194,9 +194,10 @@ html.js .page-title{ visibility:hidden; }
   color:var(--green);
   text-decoration:none;
   z-index:200; -webkit-tap-highlight-color:transparent;
-  transition:color .25s ease;
+  transition:color .25s ease, opacity .3s ease;
 }
 .contact:hover,.contact:focus-visible{ color:var(--cream); outline:none; }
+.contact.contact-hidden{ opacity:0; pointer-events:none; }
 </style>
 </head>
 <body>
@@ -351,12 +352,16 @@ html.js .page-title{ visibility:hidden; }
     descOpen = true; fillDesc();
     descEl.classList.add('open');
     labelEl.classList.add('active');
+    var cl = document.getElementById('contactLink');
+    if(cl) cl.classList.add('contact-hidden');
     pause(20000);
   }
   function closeDesc(){
     descOpen = false;
     descEl.classList.remove('open');
     labelEl.classList.remove('active');
+    var cl = document.getElementById('contactLink');
+    if(cl) cl.classList.remove('contact-hidden');
   }
 
   function go(i, fromUser){
